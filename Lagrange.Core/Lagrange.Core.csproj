@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Title>Lagrange.Core</Title>
         <Authors>Linwenxuan04, Tiger0132, LXY1226, TheSnowfield, and KonataDev/Contributors</Authors>
         <Description>The Implementation of NTQQ for Pure C#, Event Driven, derived from Konata.Core</Description>
-        <LangVersion>10</LangVersion>
+        <LangVersion>12</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Version>0.1.14-alpha</Version>
         <Copyright>Linwenxuan04 2023</Copyright>
