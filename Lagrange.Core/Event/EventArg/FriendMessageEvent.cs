@@ -2,12 +2,7 @@ using Lagrange.Core.Message;
 
 namespace Lagrange.Core.Event.EventArg;
 
-public class FriendMessageEvent : EventBase
+public class FriendMessageEvent(MessageChain chain) : EventBase
 {
-    public MessageChain Chain { get; set; }
-    
-    public FriendMessageEvent(MessageChain chain)
-    {
-        Chain = chain;
-    }
+    public MessageChain Chain { get; set; } = chain;
 }

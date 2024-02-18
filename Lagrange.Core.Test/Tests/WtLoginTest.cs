@@ -43,30 +43,36 @@ public class WtLoginTest
 
     public static BotDeviceInfo GetDeviceInfo()
     {
-        if (File.Exists("Test/DeviceInfo.json"))
+        var deviceInfoJsonPath = Path.Combine("Test", "DeviceInfo.json");
+        
+        if (File.Exists(deviceInfoJsonPath))
         {
-            var info = JsonSerializer.Deserialize<BotDeviceInfo>(File.ReadAllText("Test/DeviceInfo.json"));
+            var info = JsonSerializer.Deserialize<BotDeviceInfo>(File.ReadAllText(deviceInfoJsonPath));
             if (info != null) return info;
 
             info = BotDeviceInfo.GenerateInfo();
-            File.WriteAllText("Test/DeviceInfo.json", JsonSerializer.Serialize(info));
+            File.WriteAllText(deviceInfoJsonPath, JsonSerializer.Serialize(info));
             return info;
         }
         
         var deviceInfo = BotDeviceInfo.GenerateInfo();
-        File.WriteAllText("Test/DeviceInfo.json", JsonSerializer.Serialize(deviceInfo));
+        if (!Directory.Exists("Test"))
+        {
+            Directory.CreateDirectory("Test");
+        }
+        File.WriteAllText(deviceInfoJsonPath, JsonSerializer.Serialize(deviceInfo));
         return deviceInfo;
     }
     
     public static void SaveKeystore(BotKeystore keystore) => 
-        File.WriteAllText("Test/Keystore.json", JsonSerializer.Serialize(keystore));
+        File.WriteAllText(Path.Combine("Test", "Keystore.json"), JsonSerializer.Serialize(keystore));
     
     public static BotKeystore? LoadKeystore()
     {
         try
         {
-            var text = File.ReadAllText("Test/Keystore.json");
-            return JsonSerializer.Deserialize<BotKeystore>(text, new JsonSerializerOptions()
+            var text = File.ReadAllText(Path.Combine("Test", "Keystore.json"));
+            return JsonSerializer.Deserialize<BotKeystore>(text, new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve
             });
