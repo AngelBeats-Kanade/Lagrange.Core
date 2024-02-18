@@ -7,7 +7,7 @@ internal class AesGcmImpl : ICryptoImpl
 {
     public byte[] Encrypt(byte[] data, byte[] key)
     {
-        using var aes = new AesGcm(key);
+        using var aes = new AesGcm(key, 16);
         var iv = ByteGen.GenRandomBytes(12);
         var tag = new byte[16];
         var cipher = new byte[data.Length];
@@ -25,7 +25,7 @@ internal class AesGcmImpl : ICryptoImpl
 
     public byte[] Decrypt(byte[] data, byte[] key)
     {
-        using var aes = new AesGcm(key);
+        using var aes = new AesGcm(key, 16);
         var iv = data[..12];
         var cipher = data[12..^16];
         var tag = data[^16..];
