@@ -106,45 +106,45 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Summary>API</Summary>
 
 | API                        | Support |
-| -------------------------- | :-----: |
-| [/send_private_msg]        |    🟢    |
-| [/send_group_msg]          |    🟢    |
-| [/send_msg]                |    🟢    |
-| [/delete_msg]              |    🟢    |
-| [/get_msg]                 |    🟢    |
-| [/get_forward_msg]         |    🟢    |
-| ~~[/send_like]~~           |    🟢    |
-| [/set_group_kick]          |    🟢    |
-| [/set_group_ban]           |    🟢    |
-| [/set_group_anonymous_ban] |    🔴    |
-| [/set_group_whole_ban]     |    🟢    |
-| [/set_group_admin]         |    🟢    |
-| [/set_group_anonymous]     |    🔴    |
-| [/set_group_card]          |    🟢    |
-| [/set_group_name]          |    🟢    |
-| [/set_group_leave]         |    🟢    |
-| [/set_group_special_title] |    🔴    |
-| [/set_friend_add_request]  |    🔴    |
-| [/set_group_add_request]   |    🔴    |
-| [/get_login_info]          |    🟢    |
-| [/get_stranger_info]       |    🔴    |
-| [/get_friend_list]         |    🟢    |
-| [/get_group_info]          |    🟢    |
-| [/get_group_list]          |    🟢    |
-| [/get_group_member_info]   |    🟢    |
-| [/get_group_member_list]   |    🟢    |
-| [/get_group_honor_info]    |    🔴    |
-| [/get_cookies]             |    🟢    |
-| [/get_csrf_token]          |    🔴    |
-| [/get_credentials]         |    🔴    |
-| [/get_record]              |    🔴    |
-| [/get_image]               |    🔴    |
-| [/can_send_image]          |    🟢    |
-| [/can_send_record]         |    🟢    |
-| [/get_status]              |    🔴    |
-| [/get_version_info]        |    🟢    |
-| [/set_restart]             |    🟢    |
-| [/clean_cache]             |    🔴    |
+|----------------------------|:-------:|
+| [/send_private_msg]        |   🟢    |
+| [/send_group_msg]          |   🟢    |
+| [/send_msg]                |   🟢    |
+| [/delete_msg]              |   🟢    |
+| [/get_msg]                 |   🟢    |
+| [/get_forward_msg]         |   🟢    |
+| ~~[/send_like]~~           |   🟢    |
+| [/set_group_kick]          |   🟢    |
+| [/set_group_ban]           |   🟢    |
+| [/set_group_anonymous_ban] |   🔴    |
+| [/set_group_whole_ban]     |   🟢    |
+| [/set_group_admin]         |   🟢    |
+| [/set_group_anonymous]     |   🔴    |
+| [/set_group_card]          |   🟢    |
+| [/set_group_name]          |   🟢    |
+| [/set_group_leave]         |   🟢    |
+| [/set_group_special_title] |   🔴    |
+| [/set_friend_add_request]  |   🔴    |
+| [/set_group_add_request]   |   🔴    |
+| [/get_login_info]          |   🟢    |
+| [/get_stranger_info]       |   🔴    |
+| [/get_friend_list]         |   🟢    |
+| [/get_group_info]          |   🟢    |
+| [/get_group_list]          |   🟢    |
+| [/get_group_member_info]   |   🟢    |
+| [/get_group_member_list]   |   🟢    |
+| [/get_group_honor_info]    |   🔴    |
+| [/get_cookies]             |   🟢    |
+| [/get_csrf_token]          |   🔴    |
+| [/get_credentials]         |   🔴    |
+| [/get_record]              |   🔴    |
+| [/get_image]               |   🔴    |
+| [/can_send_image]          |   🟢    |
+| [/can_send_record]         |   🟢    |
+| [/get_status]              |   🔴    |
+| [/get_version_info]        |   🟢    |
+| [/set_restart]             |   🟢    |
+| [/clean_cache]             |   🔴    |
 
 [/send_private_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_private_msg-%E5%8F%91%E9%80%81%E7%A7%81%E8%81%8A%E6%B6%88%E6%81%AF
 [/send_group_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_group_msg-%E5%8F%91%E9%80%81%E7%BE%A4%E6%B6%88%E6%81%AF 
@@ -251,79 +251,47 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 
 ```json
 {
-    "Logging": {
-        "LogLevel": {
-            "Default": "Trace",
-            "Microsoft": "Warning",
-            "Microsoft.Hosting.Lifetime": "Information"
-        }
-    },
-    "SignServerUrl": "",
-    "Account": {
-        "Uin": 0,
-        "Password": "",
-        "Protocol": "Linux",
-        "AutoReconnect": true,
-        "GetOptimumServer": true
-    },
-    "Message": {
-      "IgnoreSelf": true
-    },
-    "Implementation": {
-        "ForwardWebSocket": {
-            "Host": "127.0.0.1",
-            "Port": 8081,
-            "HeartBeatInterval": 5000,
-            "AccessToken": ""
-        },
-        "ReverseWebSocket": {
-            "Host": "127.0.0.1",
-            "Port": 8080,
-            "Suffix": "/onebot/v11/ws",
-            "ReconnectInterval": 5000,
-            "HeartBeatInterval": 5000,
-            "AccessToken": ""
-        },
-        "Http": {
-            "Host": "",
-            "Port": 0,
-            "EventEnabled": false
-        },
-        "HttpPost": {
-            "Host": "127.0.0.1",
-            "Port": 8080,
-            "Suffix": "/onebot/v11/http",
-            "Timeout": 0
-        }
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
     }
+  },
+  "SignServerUrl": "",
+  "Account": {
+    "Uin": 0,
+    "Password": "",
+    "Protocol": "Linux",
+    "AutoReconnect": true,
+    "GetOptimumServer": true
+  },
+  "Message": {
+    "IgnoreSelf": true
+  },
+  "Implementations": [
+    {
+      "Type": "ReverseWebSocket",
+      "Host": "127.0.0.1",
+      "Port": 8080,
+      "Suffix": "/onebot/v11/ws",
+      "ReconnectInterval": 5000,
+      "HeartBeatInterval": 5000,
+      "AccessToken": ""
+    },
+    {
+      "Type": "ReverseWebSocket",
+      "Host": "127.0.0.1",
+      "Port": 8081,
+      "HeartBeatInterval": 5000,
+      "AccessToken": ""
+    }
+  ]
 }
 ```
 
 - As the Password is empty here, this indicates that QRCode login is used
 - After the QRCode Login, write Uin back to perform EasyLogin
-- If you want a multi connection, remove the 'Implementation' Part and add
-```json
-{    "Implementations": [
-      {
-        "Type": "ReverseWebSocket",
-        "Host": "127.0.0.1",
-        "Port": 8080,
-        "Suffix": "/onebot/v11/ws",
-        "ReconnectInterval": 5000,
-        "HeartBeatInterval": 5000,
-        "AccessToken": ""
-      },
-      {
-        "Type": "ReverseWebSocket",
-        "Host": "127.0.0.1",
-        "Port": 8081,
-        "HeartBeatInterval": 5000,
-        "AccessToken": ""
-      }
-    ]
-}
-    
-  ```
 
 ## NOTICE BEFORE LOGIN
 - It is recommended that use QRCode Login for the first time as NewDeviceLogin is not implemented.
