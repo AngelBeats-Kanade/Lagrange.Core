@@ -1,5 +1,6 @@
 using ProtoBuf;
 using System.Reflection;
+using Lagrange.Core.Common.Entity;
 using Lagrange.Core.Message.Entity;
 using Lagrange.Core.Utility.Extension;
 using Lagrange.Core.Utility.Generator;
@@ -101,9 +102,9 @@ internal static class MessagePacker
         return message;
     }
     
-    public static MessageChain Parse(PushMsgBody message)
+    public static MessageChain Parse(PushMsgBody message, bool isFake = false)
     {
-        var chain = ParseChain(message);
+        var chain = isFake ? ParseFakeChain(message) : ParseChain(message);
 
         if (message.Body?.RichText is { Elems: { } elements}) // 怎么Body还能是null的
         {
@@ -226,7 +227,8 @@ internal static class MessagePacker
                 message.ResponseHead.ToUid ?? string.Empty , 
                 message.ResponseHead.FromUid ?? string.Empty, 
                 message.ContentHead.Sequence ?? 0,
-                message.ContentHead.NewId ?? 0)
+                message.ContentHead.NewId ?? 0,
+                message.ContentHead.Type == 141 ? MessageChain.MessageType.Temp : MessageChain.MessageType.Friend)
             
             : new MessageChain(
                 message.ResponseHead.Grp.GroupUin, 
@@ -240,4 +242,26 @@ internal static class MessagePacker
         
         return chain;
     }
+
+    private static MessageChain ParseFakeChain(PushMsgBody message)
+    {
+        var @base = ParseChain(message);
+
+        if (@base.IsGroup && message.ResponseHead.Grp != null)
+        {
+            @base.GroupMemberInfo = new BotGroupMember
+            {
+                MemberCard = message.ResponseHead.Grp.MemberName,
+                MemberName = message.ResponseHead.Grp.MemberName,
+                Uid = message.ResponseHead.FromUid ?? string.Empty
+            };
+        }
+        else
+        {
+            @base.FriendInfo = new BotFriend(0, message.ResponseHead.FromUid ?? string.Empty, message.ResponseHead.Forward?.FriendName ?? string.Empty, string.Empty, string.Empty);
+        }
+        
+        return @base;
+    }
+
 }
