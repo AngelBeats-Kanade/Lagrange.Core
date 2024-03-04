@@ -1,11 +1,13 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Lagrange.Core.Common.Entity;
 using Lagrange.Core.Message;
 using Lagrange.Core.Utility.Extension;
 using Lagrange.OneBot.Core.Entity;
 using Lagrange.OneBot.Core.Entity.Action;
 using Lagrange.OneBot.Core.Entity.Message;
+using Lagrange.OneBot.Core.Operation.Converters;
 using Lagrange.OneBot.Message;
 using LiteDB;
 using Microsoft.Extensions.Logging;
@@ -197,9 +199,32 @@ public partial class MessageCommon
     {
         if (_typeToSegment.TryGetValue(segment.Type, out var instance))
         {
-            if (((JsonElement)segment.Data).Deserialize(instance.GetType()) is SegmentBase cast) instance.Build(builder, cast);
-            else Log.LogCQFailed(_logger, segment.Type, string.Empty);
+            if (((JsonElement)segment.Data).Deserialize(instance.GetType(), SerializerOptions.DefaultOptions) is SegmentBase cast)
+            {
+                instance.Build(builder, cast);
+            }
+            else
+            {
+                Log.LogCQFailed(_logger, segment.Type, string.Empty);
+            }
         }
+    }
+    
+    public List<MessageChain> BuildForwardChains(OneBotForward forward)
+    {
+        List<MessageChain> chains = [];
+
+        foreach (var segment in forward.Messages)
+        {
+            if (((JsonElement)segment.Data).Deserialize<OneBotFakeNode>() is { } element)
+            {
+                var chain = ParseFakeChain(element).Build();
+                chain.FriendInfo = new BotFriend(uint.Parse(element.Uin), string.Empty, element.Name, string.Empty, string.Empty);
+                chains.Add(chain);
+            }
+        }
+
+        return chains;
     }
 
     private static partial class Log

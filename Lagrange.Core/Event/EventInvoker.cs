@@ -28,8 +28,12 @@ public partial class EventInvoker : IDisposable
         RegisterEvent((GroupMemberIncreaseEvent e) => OnGroupMemberIncreaseEvent?.Invoke(context, e));
         RegisterEvent((GroupMemberDecreaseEvent e) => OnGroupMemberDecreaseEvent?.Invoke(context, e));
         RegisterEvent((FriendRequestEvent e) => OnFriendRequestEvent?.Invoke(context, e));
+        RegisterEvent((GroupInvitationRequestEvent e) => OnGroupInvitationRequestEvent?.Invoke(context, e));
+        RegisterEvent((GroupJoinRequestEvent e) => OnGroupJoinRequestEvent?.Invoke(context, e));
         RegisterEvent((GroupMuteEvent e) => OnGroupMuteEvent?.Invoke(context, e));
         RegisterEvent((GroupMemberMuteEvent e) => OnGroupMemberMuteEvent?.Invoke(context, e));
+        RegisterEvent((GroupRecallEvent e) => OnGroupRecallEvent?.Invoke(context, e));
+        RegisterEvent((FriendRecallEvent e) => OnFriendRecallEvent?.Invoke(context, e));
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -61,19 +61,20 @@ internal static class MessagePacker
         foreach (var entity in chain)
         {
             entity.SetSelfUid(selfUid);
-            
+            message.Body?.RichText?.Elems.AddRange(entity.PackElement());
+
             if (message.Body != null)
             {
-                message.Body.RichText?.Elems.AddRange(entity.PackElement());
-                
                 if (entity.PackMessageContent() is not { } content) continue;
                 if (message.Body.MsgContent is not null) throw new InvalidOperationException("Message content is not null, conflicting with the message entity.");
-                    
+
                 using var stream = new MemoryStream();
                 Serializer.Serialize(stream, content);
                 message.Body.MsgContent = stream.ToArray();
             }
         }
+        
+        BuildAdditional(chain, message);
 
         return message;
     }
@@ -85,14 +86,13 @@ internal static class MessagePacker
         foreach (var entity in chain)
         {
             entity.SetSelfUid(selfUid);
+            message.Body?.RichText?.Elems.AddRange(entity.PackElement());
             
             if (message.Body != null)
             {
-                message.Body.RichText?.Elems.AddRange(entity.PackElement());
-
                 if (entity.PackMessageContent() is not { } content) continue;
                 if (message.Body.MsgContent is not null) throw new InvalidOperationException("Message content is not null, conflicting with the message entity.");
-                    
+
                 using var stream = new MemoryStream();
                 Serializer.Serialize(stream, content);
                 message.Body.MsgContent = stream.ToArray();
@@ -100,6 +100,24 @@ internal static class MessagePacker
         }
 
         return message;
+    }
+
+    private static void BuildAdditional(MessageChain chain, Internal.Packets.Message.Message message)
+    {
+        if (message.Body?.RichText == null) return;
+        
+        foreach (var entity in chain)
+        {
+            switch (entity)
+            {
+                case RecordEntity { Compat: { } compat }:  // Append Tag 04 -> Ptt
+                {
+                    message.Body.RichText.Ptt = compat.Ptt;
+                    message.Body.RichText.Elems.AddRange(compat.Elems);
+                    break;
+                }
+            }
+        }
     }
     
     public static MessageChain Parse(PushMsgBody message, bool isFake = false)
@@ -125,9 +143,11 @@ internal static class MessagePacker
             }
         }
 
-        if (message.Body?.RichText?.Ptt is { } ptt && !chain.IsGroup)
+        switch (message.Body?.RichText?.Ptt)
         {
-            chain.Add(new RecordEntity(ptt.FileUuid, ptt.FileName));
+            case { } groupPtt when chain.IsGroup && groupPtt.FileId == 0:  //  for legacy ptt
+                chain.Add(new RecordEntity(groupPtt.GroupFileKey, groupPtt.FileName));
+                break;
         }
 
         return chain;
@@ -155,7 +175,7 @@ internal static class MessagePacker
     {
         RoutingHead = new RoutingHead
         {
-            C2C = chain.IsGroup ? null : new C2C
+            C2C = chain.IsGroup || chain.HasTypeOf<FileEntity>() ? null : new C2C
             {
                 Uid = chain.FriendInfo?.Uid,
                 Uin = chain.FriendUin

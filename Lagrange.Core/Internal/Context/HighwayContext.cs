@@ -21,6 +21,8 @@ internal class HighwayContext : ContextBase, IDisposable
     private readonly HttpClient _client;
     private uint _sequence;
     private static readonly RuntimeTypeModel Serializer;
+    private readonly int _chunkSize;
+    private readonly uint _concurrent;
 
     static HighwayContext()
     {
@@ -28,7 +30,7 @@ internal class HighwayContext : ContextBase, IDisposable
         Serializer.UseImplicitZeroDefaults = false;
     }
     
-    public HighwayContext(ContextCollection collection, BotKeystore keystore, BotAppInfo appInfo, BotDeviceInfo device)
+    public HighwayContext(ContextCollection collection, BotKeystore keystore, BotAppInfo appInfo, BotDeviceInfo device, BotConfig config)
         : base(collection, keystore, appInfo, device)
     {
         _uploaders = new Dictionary<Type, IHighwayUploader>();
@@ -48,6 +50,8 @@ internal class HighwayContext : ContextBase, IDisposable
         _client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2)");
 
         _sequence = 0;
+        _chunkSize = (int)config.HighwayChunkSize;
+        _concurrent = config.HighwayConcurrent;
     }
 
     public async Task<bool> EchoAsync(uint uin)
@@ -98,7 +102,7 @@ internal class HighwayContext : ContextBase, IDisposable
         }
     }
 
-    public async Task<bool> UploadSrcByStreamAsync(int commonId, Stream data, string ticket, byte[] md5, byte[]? extendInfo = null)
+    public async Task<bool> UploadSrcByStreamAsync(int commonId, Stream data, byte[] ticket, byte[] md5, byte[]? extendInfo = null)
     {
         bool success = true;
         var upBlocks = new List<UpBlock>();
@@ -106,19 +110,17 @@ internal class HighwayContext : ContextBase, IDisposable
 
         long fileSize = data.Length;
         int offset = 0;
-        int chunkSize = fileSize is >= 1024 and <= 1048575 ? 8192 : 1024 * 1024;
-        int concurrent = commonId == 2 ? 1 : 8;
 
         data.Seek(0, SeekOrigin.Begin);
         while (offset < fileSize)
         {
-            var buffer = new byte[Math.Min(chunkSize, fileSize - offset)];
+            var buffer = new byte[Math.Min(_chunkSize, fileSize - offset)];
             int payload = await data.ReadAsync(buffer.AsMemory());
             var reqBody = new UpBlock(commonId, Collection.Keystore.Uin, Interlocked.Increment(ref _sequence), (ulong)fileSize, (ulong)offset, ticket, md5, buffer, extendInfo);
             upBlocks.Add(reqBody);
             offset += payload;
 
-            if (upBlocks.Count >= concurrent || data.Position == data.Length)
+            if (upBlocks.Count >= _concurrent || data.Position == data.Length)
             {
                 var tasks = upBlocks.Select(x => SendUpBlockAsync(x, uri)).ToArray();
                 var results = await Task.WhenAll(tasks);
@@ -140,6 +142,7 @@ internal class HighwayContext : ContextBase, IDisposable
             Command = "PicUp.DataUp",
             Seq = upBlock.Sequence,
             AppId = (uint)AppInfo.SubAppId,
+            DataFlag = 16,
             CommandId = (uint)upBlock.CommandId,
         };
         var segHead = new SegHead
@@ -151,13 +154,19 @@ internal class HighwayContext : ContextBase, IDisposable
             Md5 = (await upBlock.Block.Md5Async()).UnHex(),
             FileMd5 = upBlock.FileMd5,
         };
-        
+        var loginHead = new LoginSigHead
+        {
+            Uint32LoginSigType = 8,
+            BytesLoginSig = Collection.Keystore.Session.Tgt,
+            AppId = (uint)Collection.AppInfo.AppId
+        };
         var highwayHead = new ReqDataHighwayHead
         {
             MsgBaseHead = head,
             MsgSegHead = segHead,
             BytesReqExtendInfo = upBlock.ExtendInfo,
             Timestamp = upBlock.Timestamp,
+            MsgLoginSigHead = loginHead
         };
 
         bool isEnd = upBlock.Offset + (ulong)upBlock.Block.Length == upBlock.FileSize;
@@ -222,7 +231,7 @@ internal class HighwayContext : ContextBase, IDisposable
         uint Sequence, 
         ulong FileSize,
         ulong Offset, 
-        string Ticket,
+        byte[] Ticket,
         byte[] FileMd5,
         byte[] Block, 
         byte[]? ExtendInfo = null,

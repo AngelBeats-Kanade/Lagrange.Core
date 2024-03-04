@@ -15,7 +15,7 @@ public class ForwardEntity : IMessageEntity
 
     internal List<Elem> Elements { get; }
 
-    private string? SelfUin { get; set; }
+    private string? SelfUid { get; set; }
     
     public ForwardEntity()
     {
@@ -29,16 +29,17 @@ public class ForwardEntity : IMessageEntity
         Sequence = chain.Sequence;
         Uid = chain.Uid;
         Elements = chain.Elements;
+        TargetUin = chain.FriendUin;
     }
     
     IEnumerable<Elem> IMessageEntity.PackElement()
     {
         var reserve = new SrcMsg.Preserve
         {
-            Field3 = Random.Shared.Next(0, int.MaxValue),
-            ReceiverUid = Uid,
-            SenderUid = SelfUin,
-            Field8 = Random.Shared.Next(0, 10000)
+            MessageId = Random.Shared.NextInt64(0, int.MaxValue) | 0x1000000000000000L,
+            ReceiverUid = SelfUid,
+            SenderUid = Uid,
+            MessageSequence = Sequence
         };
         using var stream = new MemoryStream();
         Serializer.Serialize(stream, reserve);
@@ -50,7 +51,7 @@ public class ForwardEntity : IMessageEntity
                 SrcMsg = new SrcMsg
                 {
                     OrigSeqs = new List<uint> { Sequence },
-                    SenderUin = 0,
+                    SenderUin = TargetUin,
                     Time = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                     Elems = Elements,
                     PbReserve = stream.ToArray(),
@@ -74,7 +75,7 @@ public class ForwardEntity : IMessageEntity
         return null;
     }
 
-    public void SetSelfUid(string selfUid) => SelfUin = selfUid;
+    public void SetSelfUid(string selfUid) => SelfUid = selfUid;
 
     public string ToPreviewString() => $"[Forward]: Sequence: {Sequence}";
 }

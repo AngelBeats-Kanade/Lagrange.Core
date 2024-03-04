@@ -22,6 +22,12 @@ internal abstract class Program
             using var istr = assm.GetManifestResourceStream("Lagrange.OneBot.Resources.appsettings.json")!;
             using var temp = File.Create("appsettings.json");
             istr.CopyTo(temp);
+            
+            istr.Close();
+            temp.Close();
+
+            Console.WriteLine("Please Edit the appsettings.json to set configs and press any key to continue");
+            Console.ReadLine();
         }
 
         var hostBuilder = new LagrangeAppBuilder(args)

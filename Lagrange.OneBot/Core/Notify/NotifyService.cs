@@ -1,6 +1,8 @@
 using Lagrange.Core;
+using Lagrange.Core.Common.Interface.Api;
 using Lagrange.OneBot.Core.Entity.Notify;
 using Lagrange.OneBot.Core.Network;
+using Lagrange.OneBot.Database;
 using Microsoft.Extensions.Logging;
 
 namespace Lagrange.OneBot.Core.Notify;
@@ -12,7 +14,44 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
         bot.Invoker.OnFriendRequestEvent += async (_, @event) =>
         {
             logger.LogInformation(@event.ToString());
-            await service.SendJsonAsync(new OneBotFriendRequest(bot.BotUin, @event.SourceUin));
+            await service.SendJsonAsync(new OneBotFriendRequestNotice(bot.BotUin, @event.SourceUin));
+            await service.SendJsonAsync(new OneBotFriendRequest(bot.BotUin, @event.SourceUin, @event.SourceUid));
+        };
+
+        bot.Invoker.OnGroupInvitationReceived += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+
+            var requests = await bot.FetchGroupRequests();
+            if (requests?.FirstOrDefault(x => @event.GroupUin == x.GroupUin && @event.InvitorUin == x.InvitorMemberUin) is { } request)
+            {
+                string flag = $"{request.Sequence}-{request.GroupUin}-{(uint)request.EventType}";
+                await service.SendJsonAsync(new OneBotGroupRequest(bot.BotUin, @event.InvitorUin, @event.GroupUin, "invite", request.Comment, flag));
+            }
+        };
+        
+        bot.Invoker.OnGroupJoinRequestEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+
+            var requests = await bot.FetchGroupRequests();
+            if (requests?.FirstOrDefault(x => @event.GroupUin == x.GroupUin && @event.TargetUin == x.TargetMemberUin) is { } request)
+            {
+                string flag = $"{request.Sequence}-{request.GroupUin}-{(uint)request.EventType}";
+                await service.SendJsonAsync(new OneBotGroupRequest(bot.BotUin, @event.TargetUin, @event.GroupUin, "add", request.Comment, flag));
+            }
+        };
+        
+        bot.Invoker.OnGroupInvitationRequestEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+
+            var requests = await bot.FetchGroupRequests();
+            if (requests?.FirstOrDefault(x => @event.GroupUin == x.GroupUin && @event.TargetUin == x.TargetMemberUin) is { } request)
+            {
+                string flag = $"{request.Sequence}-{request.GroupUin}-{(uint)request.EventType}";
+                await service.SendJsonAsync(new OneBotGroupRequest(bot.BotUin, @event.TargetUin, @event.GroupUin, "add", request.Comment, flag) { InvitorId = @event.InvitorUin });
+            }
         };
 
         bot.Invoker.OnGroupAdminChangedEvent += async (_, @event) =>
@@ -40,6 +79,28 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
             logger.LogInformation(@event.ToString());
             string type = @event.Duration == 0 ? "lift_ban" : "ban";
             await service.SendJsonAsync(new OneBotGroupMute(bot.BotUin, type, @event.GroupUin, @event.OperatorUin ?? 0, @event.TargetUin, @event.Duration));
+        };
+
+        bot.Invoker.OnGroupRecallEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+            await service.SendJsonAsync(new OneBotGroupRecall(bot.BotUin)
+            {
+                GroupId = @event.GroupUin,
+                UserId = @event.AuthorUin,
+                MessageId = MessageRecord.CalcMessageHash(@event.Random, @event.Sequence),
+                OperatorId = @event.OperatorUin
+            });
+        };
+        
+        bot.Invoker.OnFriendRecallEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+            await service.SendJsonAsync(new OneBotFriendRecall(bot.BotUin)
+            {
+                UserId = @event.FriendUin,
+                MessageId = MessageRecord.CalcMessageHash(@event.Random, @event.Sequence),
+            });
         };
     }
 }

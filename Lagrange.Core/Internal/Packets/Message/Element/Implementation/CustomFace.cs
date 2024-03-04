@@ -69,11 +69,11 @@ internal class CustomFace
     
     [ProtoMember(30)] public int DownloadLen { get; set; }
     
-    [ProtoMember(31)] public string X400Url { get; set; }
+    [ProtoMember(31)] public string? X400Url { get; set; }
     
     [ProtoMember(32)] public int X400Width { get; set; }
     
     [ProtoMember(33)] public int X400Height { get; set; }
     
-    [ProtoMember(34)] public CustomFaceExtra? PbReserve { get; set; }
+    [ProtoMember(34)] public byte[]? PbReserve { get; set; }
 }

@@ -1,5 +1,6 @@
 using Lagrange.Core.Common.Entity;
 using Lagrange.Core.Message;
+using Lagrange.Core.Message.Entity;
 
 namespace Lagrange.Core.Common.Interface.Api;
 
@@ -74,8 +75,16 @@ public static class OperationExt
     /// </summary>
     /// <param name="bot">target BotContext</param>
     /// <returns></returns>
-    public static Task<List<BotGroupRequest>?> FetchRequests(this BotContext bot)
-        => bot.ContextCollection.Business.OperationLogic.FetchRequests();
+    public static Task<List<BotGroupRequest>?> FetchGroupRequests(this BotContext bot)
+        => bot.ContextCollection.Business.OperationLogic.FetchGroupRequests();
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bot"></param>
+    /// <returns></returns>
+    public static Task<List<dynamic>?> FetchFriendRequests(this BotContext bot)
+        => bot.ContextCollection.Business.OperationLogic.FetchFriendRequests();
 
     /// <summary>
     /// set status
@@ -110,4 +119,52 @@ public static class OperationExt
     /// </summary>
     public static Task<string?> GetClientKey(this BotContext bot)
         => bot.ContextCollection.Business.OperationLogic.GetClientKey();
+
+    /// <summary>
+    /// Get the history message record, max 30 seqs
+    /// </summary>
+    /// <param name="bot">target BotContext</param>
+    /// <param name="groupUin">target GroupUin</param>
+    /// <param name="startSequence">Start Sequence of the message</param>
+    /// <param name="endSequence">End Sequence of the message</param>
+    public static Task<List<MessageChain>?> GetGroupMessage(this BotContext bot, uint groupUin, uint startSequence, uint endSequence)
+        => bot.ContextCollection.Business.OperationLogic.GetGroupMessage(groupUin, startSequence, endSequence);
+    
+    /// <summary>
+    /// Get the history message record for private message
+    /// </summary>
+    /// <param name="bot">target BotContext</param>
+    /// <param name="friendUin">target FriendUin</param>
+    /// <param name="timestamp">timestamp of the message chain</param>
+    /// <param name="count">number of message to be fetched before timestamp</param>
+    public static Task<List<MessageChain>?> GetRoamMessage(this BotContext bot, uint friendUin, uint timestamp, uint count)
+        => bot.ContextCollection.Business.OperationLogic.GetRoamMessage(friendUin, timestamp, count);
+    
+    /// <summary>
+    /// Get the history message record for private message
+    /// </summary>
+    /// <param name="bot">target BotContext</param>
+    /// <param name="targetChain">target chain</param>
+    /// <param name="count">number of message to be fetched before timestamp</param>
+    public static Task<List<MessageChain>?> GetRoamMessage(this BotContext bot, MessageChain targetChain, uint count)
+    {
+        uint timestamp = (uint)(targetChain.Time - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        return bot.ContextCollection.Business.OperationLogic.GetRoamMessage(targetChain.FriendUin, timestamp, count);
+    }
+    
+    public static Task<List<string>?> FetchCustomFace(this BotContext bot)
+        => bot.ContextCollection.Business.OperationLogic.FetchCustomFace();
+    
+    public static Task<string?> UploadLongMessage(this BotContext bot, List<MessageChain> chains)
+        => bot.ContextCollection.Business.OperationLogic.UploadLongMessage(chains);
+    
+    public static Task<bool> MarkAsRead(this BotContext bot, MessageChain targetChain)
+    {
+        uint timestamp = (uint)(targetChain.Time - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        return bot.ContextCollection.Business.OperationLogic.MarkAsRead(targetChain.GroupUin ?? 0, targetChain.Uid, targetChain.Sequence, timestamp);
+    }
+    
+    public static Task<bool> UploadFriendFile(this BotContext bot, uint targetUin, FileEntity fileEntity) 
+        => bot.ContextCollection.Business.OperationLogic.UploadFriendFile(targetUin, fileEntity);
+
 }

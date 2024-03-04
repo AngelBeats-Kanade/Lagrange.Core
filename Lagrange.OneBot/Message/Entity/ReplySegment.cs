@@ -25,6 +25,11 @@ public partial class ReplySegment : SegmentBase
         if (segment is ReplySegment reply && Database is not null)
         {
             reply.TargetChain ??= (MessageChain)Database.GetCollection<MessageRecord>().FindOne(x => x.MessageHash == int.Parse(reply.MessageId));
+
+            var build = MessagePacker.Build(reply.TargetChain, "");
+            var virtualElem = build.Body?.RichText?.Elems;
+            if (virtualElem != null) reply.TargetChain.Elements.AddRange(virtualElem);
+            
             builder.Forward(reply.TargetChain);
         }
     }
@@ -32,7 +37,6 @@ public partial class ReplySegment : SegmentBase
     public override SegmentBase FromEntity(MessageChain chain, IMessageEntity entity)
     {
         if (entity is not ForwardEntity forward || Database is null) throw new ArgumentException("The entity is not a forward entity.");
-
         
         var collection = Database.GetCollection<MessageRecord>();
             
@@ -42,11 +46,10 @@ public partial class ReplySegment : SegmentBase
         var query = chain.IsGroup
             ? collection.Query().Where(x => x.Sequence == forward.Sequence).Where(x => x.GroupUin == groupUin)
             : collection.Query().Where(x => x.Sequence == forward.Sequence).Where(x => x.FriendUin == friendUin);
-        var target = query.First();
+        var target = query.FirstOrDefault();
 
-        return new ReplySegment
-        {
-            MessageId = target.MessageHash.ToString()
-        };
+        return target == null
+            ? new ReplySegment { MessageId = 0.ToString() }
+            : new ReplySegment { MessageId = target.MessageHash.ToString() };
     }
 }

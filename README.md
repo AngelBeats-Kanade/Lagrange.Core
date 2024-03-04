@@ -16,6 +16,9 @@ An Implementation of NTQQ Protocol, with Pure C#, Derived from Konata.Core
 
 </div>
 
+## Document
+[Lagrange.Doc](https://lagrangedev.github.io/Lagrange.Doc/)
+
 ## Disclaimer
 
 The Lagrange.Core project, including its developers, contributors, and affiliated individuals or entities, hereby explicitly disclaim any association with, support for, or endorsement of any form of illegal behavior. This disclaimer extends to any use or application of the Lagrange.Core project that may be contrary to local, national, or international laws, regulations, or ethical guidelines.
@@ -30,21 +33,22 @@ By using or accessing Lagrange.Core, the user acknowledges and agrees to release
 
 Please use Lagrange.Core responsibly and in accordance with the law.
 
+### Recommend [OpenShamrock](https://github.com/whitechi73/OpenShamrock) if applicable
 ## Features List
 
 | Protocol | Support | Login                     | Support | Messages  | Support | Operations        | Support | Events              | Support |
 |----------|:-------:|---------------------------|:-------:|:----------|:-------:|:------------------|:-------:|:--------------------|:-------:|
 | Windows  |   🟢    | QrCode                    |   🟢    | Images    |   🟢    | ~~Poke~~          |   🔴    | Captcha             |   🟢    |
-| macOS    |   🟢    | Password                  |   🟢    | Text / At |   🟢    | Recall            |   🟡    | BotOnline           |   🟢    |
-| Linux    |   🟢    | EasyLogin                 |   🟢    | Records   |   🟡    | Leave Group       |   🟢    | BotOffline          |   🟢    |
+| macOS    |   🟢    | Password                  |   🟢    | Text / At |   🟢    | Recall            |   🟢    | BotOnline           |   🟢    |
+| Linux    |   🟢    | EasyLogin                 |   🟢    | Records   |   🟢    | Leave Group       |   🟢    | BotOffline          |   🟢    |
 |          |         | UnusalDevice<br/>Password |   🔴    | QFace     |   🟢    | ~~Special Title~~ |   🔴    | Message             |   🟢    |
-|          |         | UnusalDevice<br/>Easy     |   🟢    | Json      |   🟡    | Kick Member       |   🟢    | ~~Poke~~            |   🔴    |
-|          |         | NewDeviceVerify           |   🔴    | Xml       |   🟢    | Mute Member       |   🟢    | MessageRecall       |   🔴    |
+|          |         | UnusalDevice<br/>Easy     |   🟢    | Json      |   🟢    | Kick Member       |   🟢    | ~~Poke~~            |   🔴    |
+|          |         | NewDeviceVerify           |   🔴    | Xml       |   🟢    | Mute Member       |   🟢    | MessageRecall       |   🟢    |
 |          |         |                           |         | Forward   |   🟢    | Set Admin         |   🟢    | GroupMemberDecrease |   🟢    |
-|          |         |                           |         | Video     |   🟡    | Friend Request    |   🔴    | GroupMemberIncrease |   🟢    |
+|          |         |                           |         | Video     |   🟡    | Friend Request    |   🟢    | GroupMemberIncrease |   🟢    |
 |          |         |                           |         | Reply.    |   🟢    | Group Request     |   🟢    | GroupPromoteAdmin   |   🟢    |
-|          |         |                           |         | File      |   🟡    | ~~Voice Call~~    |   🔴    | GroupInvite         |   🟢    |
-|          |         |                           |         | Poke      |   🟢    | Client Key        |   🟢    | GroupRequestJoin    |   🔴    |
+|          |         |                           |         | File      |   🟢    | ~~Voice Call~~    |   🔴    | GroupInvite         |   🟢    |
+|          |         |                           |         | Poke      |   🟢    | Client Key        |   🟢    | GroupRequestJoin    |   🟢    |
 |          |         |                           |         | LightApp  |   🟢    | Cookies           |   🟢    | FriendRequest       |   🟢    |
 |          |         |                           |         |           |         | Send Message      |   🟢    | ~~FriendTyping~~    |   🔴    |
 |          |         |                           |         |           |         |                   |         | ~~FriendVoiceCall~~ |   🔴    |
@@ -61,7 +65,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [Text]           |   🟢    |
 | [Face]           |   🟢    |
 | [Image]          |   🟢    |
-| [Record]         |   🟡    |
+| [Record]         |   🟢    |
 | [Video]          |   🟡    |
 | [At]             |   🟢    |
 | [Rps]            |   🟢    |
@@ -105,46 +109,46 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Details>
 <Summary>API</Summary>
 
-| API                        | Support |
-|----------------------------|:-------:|
-| [/send_private_msg]        |   🟢    |
-| [/send_group_msg]          |   🟢    |
-| [/send_msg]                |   🟢    |
-| [/delete_msg]              |   🟢    |
-| [/get_msg]                 |   🟢    |
-| [/get_forward_msg]         |   🟢    |
-| ~~[/send_like]~~           |   🟢    |
-| [/set_group_kick]          |   🟢    |
-| [/set_group_ban]           |   🟢    |
-| [/set_group_anonymous_ban] |   🔴    |
-| [/set_group_whole_ban]     |   🟢    |
-| [/set_group_admin]         |   🟢    |
-| [/set_group_anonymous]     |   🔴    |
-| [/set_group_card]          |   🟢    |
-| [/set_group_name]          |   🟢    |
-| [/set_group_leave]         |   🟢    |
-| [/set_group_special_title] |   🔴    |
-| [/set_friend_add_request]  |   🔴    |
-| [/set_group_add_request]   |   🔴    |
-| [/get_login_info]          |   🟢    |
-| [/get_stranger_info]       |   🔴    |
-| [/get_friend_list]         |   🟢    |
-| [/get_group_info]          |   🟢    |
-| [/get_group_list]          |   🟢    |
-| [/get_group_member_info]   |   🟢    |
-| [/get_group_member_list]   |   🟢    |
-| [/get_group_honor_info]    |   🔴    |
-| [/get_cookies]             |   🟢    |
-| [/get_csrf_token]          |   🔴    |
-| [/get_credentials]         |   🔴    |
-| [/get_record]              |   🔴    |
-| [/get_image]               |   🔴    |
-| [/can_send_image]          |   🟢    |
-| [/can_send_record]         |   🟢    |
-| [/get_status]              |   🔴    |
-| [/get_version_info]        |   🟢    |
-| [/set_restart]             |   🟢    |
-| [/clean_cache]             |   🔴    |
+| API                            | Support |
+|--------------------------------|:-------:|
+| [/send_private_msg]            |   🟢    |
+| [/send_group_msg]              |   🟢    |
+| [/send_msg]                    |   🟢    |
+| [/delete_msg]                  |   🟢    |
+| [/get_msg]                     |   🟢    |
+| [/get_forward_msg]             |   🟢    |
+| [/send_like]                   |   🟢    |
+| [/set_group_kick]              |   🟢    |
+| [/set_group_ban]               |   🟢    |
+| ~~[/set_group_anonymous_ban]~~ |   🔴    |
+| [/set_group_whole_ban]         |   🟢    |
+| [/set_group_admin]             |   🟢    |
+| ~~[/set_group_anonymous]~~     |   🔴    |
+| [/set_group_card]              |   🟢    |
+| [/set_group_name]              |   🟢    |
+| [/set_group_leave]             |   🟢    |
+| ~~[/set_group_special_title]~~ |   🔴    |
+| [/set_friend_add_request]      |   🟢    |
+| [/set_group_add_request]       |   🟢    |
+| [/get_login_info]              |   🟢    |
+| ~~[/get_stranger_info]~~       |   🔴    |
+| [/get_friend_list]             |   🟢    |
+| [/get_group_info]              |   🟢    |
+| [/get_group_list]              |   🟢    |
+| [/get_group_member_info]       |   🟢    |
+| [/get_group_member_list]       |   🟢    |
+| ~~[/get_group_honor_info]~~    |   🔴    |
+| [/get_cookies]                 |   🟢    |
+| ~~[/get_csrf_token]~~          |   🔴    |
+| ~~[/get_credentials]~~         |   🔴    |
+| [/get_record]                  |   🔴    |
+| [/get_image]                   |   🔴    |
+| [/can_send_image]              |   🟢    |
+| [/can_send_record]             |   🟢    |
+| [/get_status]                  |   🔴    |
+| [/get_version_info]            |   🟢    |
+| [/set_restart]                 |   🟢    |
+| [/clean_cache]                 |   🔴    |
 
 [/send_private_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_private_msg-%E5%8F%91%E9%80%81%E7%A7%81%E8%81%8A%E6%B6%88%E6%81%AF
 [/send_group_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_group_msg-%E5%8F%91%E9%80%81%E7%BE%A4%E6%B6%88%E6%81%AF 
@@ -199,14 +203,14 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | Notice   | [Group Member Decrease]        |   🟢    |
 | Notice   | [Group Member Increase]        |   🟢    |
 | Notice   | [Group Mute]                   |   🟢    |
-| Notice   | [Friend Add]                   |   🔴    |
-| Notice   | [Group Recall Message]         |   🔴    |
-| Notice   | [Friend Recall Message]        |   🔴    |
+| Notice   | [Friend Add]                   |   🟢    |
+| Notice   | [Group Recall Message]         |   🟢    |
+| Notice   | [Friend Recall Message]        |   🟢    |
 | Notice   | [Group Poke]                   |   🔴    |
 | Notice   | [Group red envelope luck king] |   🔴    |
 | Notice   | [Group Member Honor Changed]   |   🔴    |
 | Request  | [Add Friend Request]           |   🟢    |
-| Request  | [Group Request/Invitations]    |   🔴    |
+| Request  | [Group Request/Invitations]    |   🟢    |
 | Meta     | [LifeCycle]                    |   🟢    |
 | Meta     | [Heartbeat]                    |   🟢    |
 
@@ -234,11 +238,11 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Summary>Communication</Summary>
 
 | CommunicationType  | Support |
-| ------------------ | :-----: |
-| [Http]             |    🔴    |
-| [Http-Post]        |    🔴    |
-| [ForwardWebSocket] |    🟢    |
-| [ReverseWebSocket] |    🟢    |
+|--------------------|:-------:|
+| [Http]             |   🟢    |
+| [Http-Post]        |   🟢    |
+| [ForwardWebSocket] |   🟢    |
+| [ReverseWebSocket] |   🟢    |
 
 [Http]: https://github.com/botuniverse/onebot-11/blob/master/communication/http.md
 [Http-Post]: https://github.com/botuniverse/onebot-11/blob/master/communication/http-post.md
@@ -280,7 +284,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
       "AccessToken": ""
     },
     {
-      "Type": "ReverseWebSocket",
+      "Type": "ForwardWebSocket",
       "Host": "127.0.0.1",
       "Port": 8081,
       "HeartBeatInterval": 5000,

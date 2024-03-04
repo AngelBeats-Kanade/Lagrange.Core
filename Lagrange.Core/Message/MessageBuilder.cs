@@ -130,9 +130,10 @@ public sealed class MessageBuilder
     /// Add a audio entity to the message chain
     /// </summary>
     /// <param name="file">The audio file that has already been converted to SilkCodec</param>
-    public MessageBuilder Record(byte[] file)
+    /// <param name="audioLength">The length of the audio file that directly shown</param>
+    public MessageBuilder Record(byte[] file, int audioLength = 0)
     {
-        var recordEntity = new RecordEntity(file);
+        var recordEntity = new RecordEntity(file, audioLength);
         _chain.Add(recordEntity);
 
         return this;
@@ -142,9 +143,10 @@ public sealed class MessageBuilder
     /// Add a audio entity to the message chain
     /// </summary>
     /// <param name="filePath">The audio file that has already been converted to SilkCodec</param>
-    public MessageBuilder Record(string filePath)
+    /// <param name="audioLength">The length of the audio file that directly shown</param>
+    public MessageBuilder Record(string filePath, int audioLength = 0)
     {
-        var recordEntity = new RecordEntity(filePath);
+        var recordEntity = new RecordEntity(filePath, audioLength);
         _chain.Add(recordEntity);
 
         return this;
@@ -173,23 +175,55 @@ public sealed class MessageBuilder
 
         return this;
     }
-
-    public MessageBuilder File(byte[] file, string fileName)
+    
+    public MessageBuilder LongMsg(string resId)
     {
-        var fileEntity = new FileEntity(file, fileName);
-        _chain.Add(fileEntity);
+        var longMsgEntity = new LongMsgEntity(resId);
+        _chain.Add(longMsgEntity);
         
         return this;
     }
     
-    public MessageBuilder File(string filePath)
+    public MessageBuilder LongMsg(MessageChain chain)
     {
-        var fileEntity = new FileEntity(filePath);
-        _chain.Add(fileEntity);
+        var longMsgEntity = new LongMsgEntity(chain);
+        _chain.Add(longMsgEntity);
         
         return this;
     }
-
+    
+    public MessageBuilder Markdown(string json)
+    {
+        var markdownEntity = new MarkdownEntity(json);
+        _chain.Add(markdownEntity);
+        
+        return this;
+    }
+    
+    public MessageBuilder Markdown(MarkdownData data)
+    {
+        var markdownEntity = new MarkdownEntity(data);
+        _chain.Add(markdownEntity);
+        
+        return this;
+    }
+    
+    public MessageBuilder Keyboard(string json)
+    {
+        var keyboardEntity = new KeyboardEntity(json);
+        _chain.Add(keyboardEntity);
+        
+        return this;
+    }
+    
+    public MessageBuilder Keyboard(KeyboardData data)
+    {
+        var keyboardEntity = new KeyboardEntity(data);
+        _chain.Add(keyboardEntity);
+        
+        return this;
+    }
+    
     public MessageBuilder Add(IMessageEntity entity)
     {
         _chain.Add(entity);
