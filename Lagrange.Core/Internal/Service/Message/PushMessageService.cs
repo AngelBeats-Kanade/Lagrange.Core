@@ -166,9 +166,11 @@ internal class PushMessageService : BaseService<PushMessageEvent>
         {
             case Event0x210SubType.FriendRequestNotice when msg.Message.Body?.MsgContent is { } content:
             {
-                var request = Serializer.Deserialize<FriendRequest>(content.AsSpan());
-                var friendEvent = FriendSysRequestEvent.Result(msg.Message.ResponseHead.FromUin, request.Info.SourceUid, request.Info.Message, request.Info.Name);
-                extraEvents.Add(friendEvent);
+                if (Serializer.Deserialize<FriendRequest>(content.AsSpan()).Info is { } info)
+                {
+                    var friendEvent = FriendSysRequestEvent.Result(msg.Message.ResponseHead.FromUin, info.SourceUid, info.Message, info.Source);
+                    extraEvents.Add(friendEvent);
+                }
                 break;
             }
             case Event0x210SubType.FriendRecallNotice when msg.Message.Body?.MsgContent is { } content:
@@ -219,8 +221,9 @@ internal class PushMessageService : BaseService<PushMessageEvent>
     
     private enum Event0x210SubType
     {
+        FriendRequestNotice = 35,
+        FriendDeleteNotice = 39,
         FriendRecallNotice = 138,
-        FriendRequestNotice = 226,
         FriendPokeNotice = 290,
         GroupKickNotice = 212,
     }

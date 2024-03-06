@@ -4,14 +4,13 @@ using Lagrange.Core.Internal.Packets.Message.Element;
 using Lagrange.Core.Internal.Packets.Message.Element.Implementation;
 using Lagrange.Core.Utility.Binary;
 using Lagrange.Core.Utility.Extension;
+using ProtoBuf;
 
 namespace Lagrange.Core.Message.Entity;
 
 [MessageElement(typeof(TransElem))]
 public class FileEntity : IMessageEntity
 {
-    public bool IsGroup { get; internal set; }
-    
     public long FileSize { get; internal set; }
     
     public string FileName { get; internal set; }
@@ -19,6 +18,11 @@ public class FileEntity : IMessageEntity
     public byte[] FileMd5 { get; internal set; }
     
     public string? FileUrl { get; internal set; }
+    
+    /// <summary>
+    /// Only Group File has such field
+    /// </summary>
+    public string? FileId { get; set; }
     
     internal string? FileUuid { get; set; }
     
@@ -50,7 +54,7 @@ public class FileEntity : IMessageEntity
 
     /// <summary>
     /// This entity could not be directly sent via <see cref="MessageChain"/>,
-    /// it should be sent via <see cref="Lagrange.Core.Common.Interface.Api.GroupExt.UploadFile"/>
+    /// it should be sent via <see cref="Lagrange.Core.Common.Interface.Api.GroupExt.GroupFSUpload"/>
     /// </summary>
     public FileEntity(byte[] payload, string fileName)
     {
@@ -85,7 +89,7 @@ public class FileEntity : IMessageEntity
             Subcmd = 1,
             DangerEvel = 0,
             ExpireTime = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0) + TimeSpan.FromDays(7)).TotalSeconds,
-            FileHash = FileHash // TODO: Send out Oidb
+            FileHash = FileHash
         }
     };
     
@@ -95,8 +99,15 @@ public class FileEntity : IMessageEntity
         {
             var payload = new BinaryPacket(trans.ElemValue);
             payload.Skip(1);
-            var protobuf = payload.ReadBytes(BinaryPacket.Prefix.Uint16 | BinaryPacket.Prefix.LengthOnly);
-            Console.WriteLine(protobuf.Hex());
+            var data = payload.ReadBytes(BinaryPacket.Prefix.Uint16 | BinaryPacket.Prefix.LengthOnly);
+            var extra = Serializer.Deserialize<GroupFileExtra>(data.AsSpan()).Inner.Info;
+
+            return new FileEntity
+            {
+                FileSize = extra.FileSize,
+                FileMd5 = extra.FileMd5.UnHex(),
+                FileId = extra.FileId
+            };
         }
 
         return null;

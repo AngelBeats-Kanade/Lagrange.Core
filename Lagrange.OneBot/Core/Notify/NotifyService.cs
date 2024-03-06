@@ -1,5 +1,6 @@
 using Lagrange.Core;
 using Lagrange.Core.Common.Interface.Api;
+using Lagrange.Core.Message.Entity;
 using Lagrange.OneBot.Core.Entity.Notify;
 using Lagrange.OneBot.Core.Network;
 using Lagrange.OneBot.Database;
@@ -11,11 +12,20 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
 {
     public void RegisterEvents()
     {
+        bot.Invoker.OnGroupMessageReceived += async (_, @event) =>
+        {
+            if (@event.Chain.GetEntity<FileEntity>() is { FileId: { } id } file)
+            {
+                var fileInfo = new OneBotFileInfo(id, file.FileName, (ulong)file.FileSize);
+                await service.SendJsonAsync(new OneBotGroupFile(bot.BotUin, @event.Chain.GroupUin ?? 0, @event.Chain.FriendUin, fileInfo));
+            }
+        };
+        
         bot.Invoker.OnFriendRequestEvent += async (_, @event) =>
         {
             logger.LogInformation(@event.ToString());
             await service.SendJsonAsync(new OneBotFriendRequestNotice(bot.BotUin, @event.SourceUin));
-            await service.SendJsonAsync(new OneBotFriendRequest(bot.BotUin, @event.SourceUin, @event.SourceUid));
+            await service.SendJsonAsync(new OneBotFriendRequest(bot.BotUin, @event.SourceUin, @event.Message, @event.SourceUid));
         };
 
         bot.Invoker.OnGroupInvitationReceived += async (_, @event) =>
