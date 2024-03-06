@@ -64,6 +64,6 @@ public class NTLoginTest
         await Task.Delay(1000);
 
         await bot.ContextCollection.Business.SendEvent(FetchAvatarEvent.Create("u_jwgijMpG1BnknQNubcy1bQ"));
-        await bot.FetchRequests();
+        // await bot.FetchRequests();
     }
 }
