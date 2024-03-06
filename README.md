@@ -4,8 +4,8 @@
 
 [![Core](https://img.shields.io/badge/Lagrange-Core-blue)](#)
 [![OneBot](https://img.shields.io/badge/Lagrange-OneBot-blue)](#)
-[![C#](https://img.shields.io/badge/Core-%20.NET_6-blue)](#)
-[![C#](https://img.shields.io/badge/OneBot-%20.NET_7-blue)](#)
+[![C#](https://img.shields.io/badge/Core-%20.NET_8-blue)](#)
+[![C#](https://img.shields.io/badge/OneBot-%20.NET_8-blue)](#)
 
 [![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL-3.0&color=lightrey)](#)
 [![Telegram](https://img.shields.io/endpoint?url=https%3A%2F%2Ftelegram-badge-4mbpu8e0fit4.runkit.sh%2F%3Furl%3Dhttps%3A%2F%2Ft.me%2F%2B6HNTeJO0JqtlNmRl)](https://t.me/+6HNTeJO0JqtlNmRl)
@@ -18,6 +18,14 @@ An Implementation of NTQQ Protocol, with Pure C#, Derived from Konata.Core
 
 ## Document
 [Lagrange.Doc](https://lagrangedev.github.io/Lagrange.Doc/)
+
+## Out of Active Feature Requesting
+
+Lagrange.Core has completed nearly all the function and task scheduled by Linwenxuan05, so mostly enhance to the library would be concentrated to the repo for next.
+
+Feature request would be accepted but implemented with a long duration.
+
+The new function of NTQQ supported in following versions would be added as well.
 
 ## Disclaimer
 
@@ -198,7 +206,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 |----------|--------------------------------|:-------:|
 | Message  | [Private Message]              |   🟢    |
 | Message  | [Group Message]                |   🟢    |
-| Notice   | [Group File Upload]            |   🔴    |
+| Notice   | [Group File Upload]            |   🟢    |
 | Notice   | [Group Admin Change]           |   🟢    |
 | Notice   | [Group Member Decrease]        |   🟢    |
 | Notice   | [Group Member Increase]        |   🟢    |
@@ -288,6 +296,20 @@ Please use Lagrange.Core responsibly and in accordance with the law.
       "Host": "127.0.0.1",
       "Port": 8081,
       "HeartBeatInterval": 5000,
+      "AccessToken": ""
+    },
+    {
+      "Type": "HttpPost",
+      "Host": "127.0.0.1",
+      "Port": 8082,
+      "Suffix": "/",
+      "HeartBeatInterval": 5000,
+      "AccessToken": ""
+    },
+    {
+      "Type": "Http",
+      "Host": "*",
+      "Port": 8083,
       "AccessToken": ""
     }
   ]

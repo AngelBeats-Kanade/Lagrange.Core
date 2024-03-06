@@ -29,12 +29,8 @@ internal class OperationLogic : LogicBase
     public Task<List<BotGroupMember>> FetchMembers(uint groupUin, bool refreshCache = false) => 
             Collection.Business.CachingLogic.GetCachedMembers(groupUin, refreshCache);
     
-    public async Task<List<BotGroup>> FetchGroups(bool refreshCache)
-    {
-        if (refreshCache) await Collection.Business.PushEvent(InfoSyncEvent.Create());
-
-        return await Collection.Business.CachingLogic.GetCachedGroups();
-    }
+    public Task<List<BotGroup>> FetchGroups(bool refreshCache) =>
+        Collection.Business.CachingLogic.GetCachedGroups(refreshCache);
 
     public async Task<MessageResult> SendMessage(MessageChain chain)
     {
@@ -282,12 +278,12 @@ internal class OperationLogic : LogicBase
         return events.Count != 0 && ((RequestFriendEvent)events[0]).ResultCode == 0;
     }
 
-    public async Task<bool> Like(uint targetUin)
+    public async Task<bool> Like(uint targetUin, uint count)
     {
         var uid = await Collection.Business.CachingLogic.ResolveUid(null, targetUin);
         if (uid == null) return false;
 
-        var friendLikeEvent = FriendLikeEvent.Create(uid);
+        var friendLikeEvent = FriendLikeEvent.Create(uid, count);
         var results = await Collection.Business.SendEvent(friendLikeEvent);
         return results.Count != 0 && results[0].ResultCode == 0;
     }
