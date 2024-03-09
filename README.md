@@ -19,8 +19,9 @@ An Implementation of NTQQ Protocol, with Pure C#, Derived from Konata.Core
 ## Document
 [Lagrange.Doc](https://lagrangedev.github.io/Lagrange.Doc/)
 
-[Docker](Docker.md)
+[Docker guide](Docker.md) | [Docker 使用指南](Docker_zh.md)
 
+[English Readme](README.md) | [中文 Readme](README_zh.md)
 ## Out of Active Feature Requesting
 
 Lagrange.Core has completed nearly all the function and task scheduled by Linwenxuan05, so mostly enhance to the library would be concentrated to the repo for next.
@@ -91,7 +92,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [Forward]        |   🟢    |
 | [Node]           |   🟢    |
 | [Xml]            |   🔴    |
-| [Json]           |   🔴    |
+| [Json]           |   🟢    |
 
 [Text]: https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#qq-%E8%A1%A8%E6%83%85
 [Record]: https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#%E8%AF%AD%E9%9F%B3
@@ -281,7 +282,11 @@ Please use Lagrange.Core responsibly and in accordance with the law.
     "GetOptimumServer": true
   },
   "Message": {
-    "IgnoreSelf": true
+    "IgnoreSelf": true,
+    "StringPost": false
+  },
+  "QrCode": {
+    "ConsoleCompatibilityMode": false
   },
   "Implementations": [
     {
