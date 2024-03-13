@@ -359,4 +359,32 @@ internal class OperationLogic : LogicBase
         var results = await Collection.Business.SendEvent(markAsReadEvent);
         return results.Count != 0 && ((MarkReadedEvent)results[0]).ResultCode == 0;
     }
+
+    public async Task<bool> FriendPoke(uint friendUin)
+    {
+        var friendPokeEvent = FriendPokeEvent.Create(friendUin);
+        var results = await Collection.Business.SendEvent(friendPokeEvent);
+        return results.Count != 0 && ((FriendPokeEvent)results[0]).ResultCode == 0;
+    }
+    
+    public async Task<bool> GroupPoke(uint groupUin, uint friendUin)
+    {
+        var friendPokeEvent = GroupPokeEvent.Create(friendUin, groupUin);
+        var results = await Collection.Business.SendEvent(friendPokeEvent);
+        return results.Count != 0 && ((FriendPokeEvent)results[0]).ResultCode == 0;
+    }
+
+    public async Task<bool> SetEssenceMessage(uint groupUin, uint sequence, uint random)
+    {
+        var setEssenceMessageEvent = SetEssenceMessageEvent.Create(groupUin, sequence, random);
+        var results = await Collection.Business.SendEvent(setEssenceMessageEvent);
+        return results.Count != 0 && ((SetEssenceMessageEvent)results[0]).ResultCode == 0;
+    }
+    
+    public async Task<bool> RemoveEssenceMessage(uint groupUin, uint sequence, uint random)
+    {
+        var removeEssenceMessageEvent = RemoveEssenceMessageEvent.Create(groupUin, sequence, random);
+        var results = await Collection.Business.SendEvent(removeEssenceMessageEvent);
+        return results.Count != 0 && ((RemoveEssenceMessageEvent)results[0]).ResultCode == 0;
+    }
 }

@@ -2,22 +2,44 @@
 
 # Lagrange.Core
 
-[![Core](https://img.shields.io/badge/Lagrange-Core-blue)](#)
-[![OneBot](https://img.shields.io/badge/Lagrange-OneBot-blue)](#)
-[![C#](https://img.shields.io/badge/Core-%20.NET_8-blue)](#)
-[![C#](https://img.shields.io/badge/OneBot-%20.NET_8-blue)](#)
+An Implementation of NTQQ Protocol, with Pure C#, Derived from Konata.Core
 
-[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL-3.0&color=lightrey)](#)
+![Core](https://img.shields.io/badge/Lagrange-Core-blue)
+![OneBot](https://img.shields.io/badge/Lagrange-OneBot-blue)
+![C#](https://img.shields.io/badge/Core-%20.NET_8-blue)
+![C#](https://img.shields.io/badge/OneBot-%20.NET_8-blue)
+
+[![License](https://img.shields.io/static/v1?label=LICENSE&message=GPL-3.0&color=lightrey)](/LICENSE)
 [![Telegram](https://img.shields.io/endpoint?url=https%3A%2F%2Ftelegram-badge-4mbpu8e0fit4.runkit.sh%2F%3Furl%3Dhttps%3A%2F%2Ft.me%2F%2B6HNTeJO0JqtlNmRl)](https://t.me/+6HNTeJO0JqtlNmRl)
 
-<a href="https://trendshift.io/repositories/3486" target="_blank"><img src="https://trendshift.io/api/badge/repositories/3486" alt="Linwenxuan05%2FLagrange.Core | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+[![Image](https://trendshift.io/api/badge/repositories/3486)](https://trendshift.io/repositories/3486)
 
-An Implementation of NTQQ Protocol, with Pure C#, Derived from Konata.Core
+**&gt; English &lt;** | [简体中文](README_zh.md)
 
 </div>
 
+## Related Projects
+
+<table>
+<tr>
+  <td><a href="https://github.com/LagrangeDev/Lagrange.Core">Lagrange.Core</a></td>
+  <td>NTQQ Protocol Implementation（👈Here</td>
+</tr>
+<tr>
+  <td><a href="https://github.com/whitechi73/OpenShamrock">OpenShamrock</a></td>
+  <td>Based on Xposed, OneBot Bot Framework</td>
+</tr>
+<tr>
+  <td><a href="https://github.com/chrononeko/chronocat">Chronocat</a></td>
+  <td>Based on Electron, modular Satori Bot Framework</td>
+</tr>
+</table>
+
 ## Document
+
 [Lagrange.Doc](https://lagrangedev.github.io/Lagrange.Doc/)
+
+[Docker guide](Docker.md)
 
 ## Out of Active Feature Requesting
 
@@ -41,12 +63,11 @@ By using or accessing Lagrange.Core, the user acknowledges and agrees to release
 
 Please use Lagrange.Core responsibly and in accordance with the law.
 
-### Recommend [OpenShamrock](https://github.com/whitechi73/OpenShamrock) if applicable
 ## Features List
 
 | Protocol | Support | Login                     | Support | Messages  | Support | Operations        | Support | Events              | Support |
-|----------|:-------:|---------------------------|:-------:|:----------|:-------:|:------------------|:-------:|:--------------------|:-------:|
-| Windows  |   🟢    | QrCode                    |   🟢    | Images    |   🟢    | ~~Poke~~          |   🔴    | Captcha             |   🟢    |
+| -------- | :-----: | ------------------------- | :-----: | :-------- | :-----: | :---------------- | :-----: | :------------------ | :-----: |
+| Windows  |   🟢    | QrCode                    |   🟢    | Images    |   🟢    |   Poke            |   🟢    | Captcha             |   🟢    |
 | macOS    |   🟢    | Password                  |   🟢    | Text / At |   🟢    | Recall            |   🟢    | BotOnline           |   🟢    |
 | Linux    |   🟢    | EasyLogin                 |   🟢    | Records   |   🟢    | Leave Group       |   🟢    | BotOffline          |   🟢    |
 |          |         | UnusalDevice<br/>Password |   🔴    | QFace     |   🟢    | ~~Special Title~~ |   🔴    | Message             |   🟢    |
@@ -63,13 +84,13 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 
 ## Lagrange.OneBot
 
-### Implementation - OneBot v11
-#### The Binary for development could be found in Actions Artifacts
+> The Binary for development could be found in Actions Artifacts
+
 <Details>
 <Summary>Message Segement</Summary>
 
 | Message Segement | Support |
-|------------------|:-------:|
+| ---------------- | :-----: |
 | [Text]           |   🟢    |
 | [Face]           |   🟢    |
 | [Image]          |   🟢    |
@@ -89,7 +110,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [Forward]        |   🟢    |
 | [Node]           |   🟢    |
 | [Xml]            |   🔴    |
-| [Json]           |   🔴    |
+| [Json]           |   🟢    |
 
 [Text]: https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#qq-%E8%A1%A8%E6%83%85
 [Record]: https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#%E8%AF%AD%E9%9F%B3
@@ -118,7 +139,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Summary>API</Summary>
 
 | API                            | Support |
-|--------------------------------|:-------:|
+| ------------------------------ | :-----: |
 | [/send_private_msg]            |   🟢    |
 | [/send_group_msg]              |   🟢    |
 | [/send_msg]                    |   🟢    |
@@ -153,13 +174,13 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [/get_image]                   |   🔴    |
 | [/can_send_image]              |   🟢    |
 | [/can_send_record]             |   🟢    |
-| [/get_status]                  |   🔴    |
+| [/get_status]                  |   🟢    |
 | [/get_version_info]            |   🟢    |
 | [/set_restart]                 |   🟢    |
 | [/clean_cache]                 |   🔴    |
 
 [/send_private_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_private_msg-%E5%8F%91%E9%80%81%E7%A7%81%E8%81%8A%E6%B6%88%E6%81%AF
-[/send_group_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_group_msg-%E5%8F%91%E9%80%81%E7%BE%A4%E6%B6%88%E6%81%AF 
+[/send_group_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_group_msg-%E5%8F%91%E9%80%81%E7%BE%A4%E6%B6%88%E6%81%AF
 [/send_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#send_msg-发送消息
 [/delete_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#delete_msg-撤回消息
 [/get_msg]: https://github.com/botuniverse/onebot-11/blob/master/api/public.md#get_msg-获取消息
@@ -203,7 +224,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Summary>Event</Summary>
 
 | PostType | EventName                      | Support |
-|----------|--------------------------------|:-------:|
+| -------- | ------------------------------ | :-----: |
 | Message  | [Private Message]              |   🟢    |
 | Message  | [Group Message]                |   🟢    |
 | Notice   | [Group File Upload]            |   🟢    |
@@ -246,7 +267,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 <Summary>Communication</Summary>
 
 | CommunicationType  | Support |
-|--------------------|:-------:|
+| ------------------ | :-----: |
 | [Http]             |   🟢    |
 | [Http-Post]        |   🟢    |
 | [ForwardWebSocket] |   🟢    |
@@ -259,7 +280,9 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 
 </Details>
 
-#### appsettings.json Example
+### `appsettings.json` Example
+
+> As the Password is empty here, this indicates that QRCode login is used
 
 ```json
 {
@@ -279,7 +302,11 @@ Please use Lagrange.Core responsibly and in accordance with the law.
     "GetOptimumServer": true
   },
   "Message": {
-    "IgnoreSelf": true
+    "IgnoreSelf": true,
+    "StringPost": false
+  },
+  "QrCode": {
+    "ConsoleCompatibilityMode": false
   },
   "Implementations": [
     {
@@ -316,13 +343,10 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 }
 ```
 
-- As the Password is empty here, this indicates that QRCode login is used
-- After the QRCode Login, write Uin back to perform EasyLogin
-
 ## NOTICE BEFORE LOGIN
-- It is recommended that use QRCode Login for the first time as NewDeviceLogin is not implemented.
-- Linux Protocol is recommended as only SignServer for such is provided
-- After QRCode Login, write password and uin back to appsettings.json
+
+- The NewDeviceLogin feature has not been implemented yet. It is recommended to use QRCode login for now.
+- Currently, only the signature server implementation for Linux protocol is available. It is recommended to use the Linux protocol.
 
 ## Known Problem
 
@@ -330,6 +354,6 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 
 ~~Thanks KonataDev/TheSnowfield for Provision of Signature API~~
 
-Signature API is now not provided, you may need to find it somewhere and inherit `SignProvider` class for `CustomSignProvider` in  `BotConfig`
+Signature API is now not provided, you may need to find it somewhere and inherit `SignProvider` class for `CustomSignProvider` in `BotConfig`
 
 - Signature of Windows and macOS is missing, you need to figure out by your self

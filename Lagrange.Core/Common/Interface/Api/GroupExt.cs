@@ -1,5 +1,6 @@
 using Lagrange.Core.Common.Entity;
 using Lagrange.Core.Event.EventArg;
+using Lagrange.Core.Message;
 using Lagrange.Core.Message.Entity;
 
 namespace Lagrange.Core.Common.Interface.Api;
@@ -61,6 +62,15 @@ public static class GroupExt
     
     public static Task<bool> SetFriendRequest(this BotContext bot, FriendRequestEvent request, bool accept = true)
         => bot.ContextCollection.Business.OperationLogic.SetFriendRequest(request.SourceUid, accept);
+
+    public static Task<bool> GroupPoke(this BotContext bot, uint groupUin, uint friendUin)
+        => bot.ContextCollection.Business.OperationLogic.GroupPoke(groupUin, friendUin);
+
+    public static Task<bool> SetEssenceMessage(this BotContext bot, MessageChain chain)
+        => bot.ContextCollection.Business.OperationLogic.SetEssenceMessage(chain.GroupUin ?? 0, chain.Sequence, (uint)(chain.MessageId & 0xFFFFFFFF));
+    
+    public static Task<bool> RemoveEssenceMessage(this BotContext bot, MessageChain chain)
+        => bot.ContextCollection.Business.OperationLogic.RemoveEssenceMessage(chain.GroupUin ?? 0, chain.Sequence, (uint)(chain.MessageId & 0xFFFFFFFF));
 
     #region Group File System
 

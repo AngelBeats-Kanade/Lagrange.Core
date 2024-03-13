@@ -9,11 +9,13 @@ using Lagrange.Core.Internal.Event.System;
 using Lagrange.Core.Internal.Service;
 using Lagrange.Core.Message;
 using Lagrange.Core.Message.Entity;
+using FriendPokeEvent = Lagrange.Core.Event.EventArg.FriendPokeEvent;
 
 namespace Lagrange.Core.Internal.Context.Logic.Implementation;
 
 [EventSubscribe(typeof(PushMessageEvent))]
 [EventSubscribe(typeof(SendMessageEvent))]
+[EventSubscribe(typeof(MultiMsgUploadEvent))]
 [EventSubscribe(typeof(GetRoamMessageEvent))]
 [EventSubscribe(typeof(GetGroupMessageEvent))]
 [EventSubscribe(typeof(GroupSysInviteEvent))]
@@ -27,6 +29,8 @@ namespace Lagrange.Core.Internal.Context.Logic.Implementation;
 [EventSubscribe(typeof(GroupSysRequestInvitationEvent))]
 [EventSubscribe(typeof(FriendSysRecallEvent))]
 [EventSubscribe(typeof(FriendSysRequestEvent))]
+[EventSubscribe(typeof(FriendSysPokeEvent))]
+[EventSubscribe(typeof(LoginNotifyEvent))]
 [BusinessLogic("MessagingLogic", "Manage the receiving and sending of messages and notifications")]
 internal class MessagingLogic : LogicBase
 {
@@ -171,6 +175,18 @@ internal class MessagingLogic : LogicBase
                 Collection.Invoker.PostEvent(recallArgs);
                 break;
             }
+            case FriendSysPokeEvent poke:
+            {
+                var pokeArgs = new FriendPokeEvent(poke.FriendUin);
+                Collection.Invoker.PostEvent(pokeArgs);
+                break;
+            }
+            case LoginNotifyEvent login:
+            {
+                var deviceArgs = new DeviceLoginEvent(login.IsLogin, login.AppId, login.Tag, login.Message);
+                Collection.Invoker.PostEvent(deviceArgs);
+                break;
+            }
         }
     }
 
@@ -178,11 +194,23 @@ internal class MessagingLogic : LogicBase
     {
         switch (e)
         {
+            case MultiMsgUploadEvent { Chains: { } chains }:
+            {
+                foreach (var chain in chains)
+                {
+                    await ResolveChainMetadata(chain);
+                    await ResolveOutgoingChain(chain);
+                    await Collection.Highway.UploadResources(chain);
+                }
+                break;
+            }
             case SendMessageEvent send: // resolve Uin to Uid
+            {
                 await ResolveChainMetadata(send.Chain);
                 await ResolveOutgoingChain(send.Chain);
                 await Collection.Highway.UploadResources(send.Chain);
                 break;
+            }
         }
     }
 
@@ -300,13 +328,6 @@ internal class MessagingLogic : LogicBase
             }
             case MultiMsgEntity { ResId: null } multiMsg:
             {
-                foreach (var multi in multiMsg.Chains)
-                {
-                    await ResolveChainMetadata(multi);
-                    await ResolveOutgoingChain(multi);
-                    await Collection.Highway.UploadResources(multi);
-                }
-
                 var multiMsgEvent = MultiMsgUploadEvent.Create(multiMsg.GroupUin, multiMsg.Chains);
                 var results = await Collection.Business.SendEvent(multiMsgEvent);
                 if (results.Count != 0)

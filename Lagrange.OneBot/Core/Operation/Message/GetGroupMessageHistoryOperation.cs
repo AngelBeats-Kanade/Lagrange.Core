@@ -21,15 +21,14 @@ public class GetGroupMessageHistoryOperation(LiteDatabase database, MessageServi
         {
             var collection = database.GetCollection<MessageRecord>();
             var record = history.MessageId == 0
-                ? collection.Query().Where(x => x.GroupUin == history.GroupId).OrderByDescending(x => x.Time).First()
-                : collection.FindOne(x => x.MessageHash == history.MessageId);
+                ? collection.Find(x => x.GroupUin == history.GroupId).OrderByDescending(x => x.Time).First()
+                : collection.FindById(history.MessageId);
             var chain = (MessageChain)record;
             
             if (await context.GetGroupMessage(history.GroupId, (uint)(chain.Sequence - history.Count), chain.Sequence) is { } results)
             {
                 var messages = results
-                    .Select(message.Convert)
-                    .Select(x => message.ConvertToGroupMsg(context.BotUin, chain, record.MessageHash))
+                    .Select(x => message.ConvertToGroupMsg(context.BotUin, x, record.MessageHash))
                     .ToList();
                 return new OneBotResult(new OneBotGroupMsgHistoryResponse(messages), 0, "ok");
             }

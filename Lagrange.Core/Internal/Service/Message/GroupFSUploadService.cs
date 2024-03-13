@@ -19,9 +19,9 @@ internal class GroupFSUploadService : BaseService<GroupFSUploadEvent>
     {
         if (input.Entity.FileStream is null) throw new Exception();
 
-        var packet = new OidbSvcTrpcTcpBase<OidbSvcTrpcTcp0x6D6_0>(new OidbSvcTrpcTcp0x6D6_0
+        var packet = new OidbSvcTrpcTcpBase<OidbSvcTrpcTcp0x6D6>(new OidbSvcTrpcTcp0x6D6
         {
-            File = new OidbSvcTrpcTcp0x6D6_0Upload
+            File = new OidbSvcTrpcTcp0x6D6Upload
             {
                 GroupUin = input.GroupUin,
                 AppId = 7,
@@ -36,7 +36,7 @@ internal class GroupFSUploadService : BaseService<GroupFSUploadEvent>
                 FileMd5 = input.Entity.FileMd5,
                 Field15 = true
             }
-        }, false, true);
+        }, 0x6D6, 0, false, true);
 
         output = packet.Serialize();
         extraPackets = null;
@@ -49,7 +49,7 @@ internal class GroupFSUploadService : BaseService<GroupFSUploadEvent>
         var payload = Serializer.Deserialize<OidbSvcTrpcTcpResponse<OidbSvcTrpcTcp0x6D6Response>>(input.AsSpan());
         var upload = payload.Body.Upload;
         
-        output = GroupFSUploadEvent.Result(upload.RetCode, upload.FileId, upload.FileKey, upload.CheckKey, upload.UploadIp, upload.UploadPort);
+        output = GroupFSUploadEvent.Result(upload.RetCode, upload.BoolFileExist, upload.FileId, upload.FileKey, upload.CheckKey, upload.UploadIp, upload.UploadPort);
         extraEvents = null;
         return true;
     }

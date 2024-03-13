@@ -21,15 +21,14 @@ public class GetFriendMessageHistoryOperation(LiteDatabase database, MessageServ
         {
             var collection = database.GetCollection<MessageRecord>();
             var record = history.MessageId == 0 
-                ? collection.Query().Where(x => x.FriendUin == history.UserId).OrderByDescending(x => x.Time).First() 
-                : collection.FindOne(x => x.MessageHash == history.MessageId);
+                ? collection.Find(x => x.FriendUin == history.UserId).OrderByDescending(x => x.Time).First() 
+                : collection.FindById(history.MessageId);
             var chain = (MessageChain)record;
 
             if (await context.GetRoamMessage(chain, 20) is { } results)
             {
                 var messages = results
-                    .Select(message.Convert)
-                    .Select(x => message.ConvertToPrivateMsg(context.BotUin, chain, record.MessageHash))
+                    .Select(x => message.ConvertToPrivateMsg(context.BotUin, x, record.MessageHash))
                     .ToList();
                 return new OneBotResult(new OneBotFriendMsgHistoryResponse(messages), 0, "ok");
             }

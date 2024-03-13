@@ -7,11 +7,15 @@ namespace Lagrange.Core.Message.Entity;
 [MessageElement(typeof(SrcMsg))]
 public class ForwardEntity : IMessageEntity
 {
-    public uint Sequence { get; internal set; }
+    public DateTime Time { get; set; }
     
-    public string? Uid { get; internal set; }
+    public ulong MessageId { get; set; }
+    
+    public uint Sequence { get; set; }
+    
+    public string? Uid { get; set; }
 
-    public uint TargetUin { get; internal set; }
+    public uint TargetUin { get; set; }
 
     internal List<Elem> Elements { get; }
 
@@ -26,20 +30,22 @@ public class ForwardEntity : IMessageEntity
 
     public ForwardEntity(MessageChain chain)
     {
+        Time = chain.Time;
         Sequence = chain.Sequence;
         Uid = chain.Uid;
         Elements = chain.Elements;
         TargetUin = chain.FriendUin;
+        MessageId = chain.MessageId;
     }
     
     IEnumerable<Elem> IMessageEntity.PackElement()
     {
         var reserve = new SrcMsg.Preserve
         {
-            MessageId = Random.Shared.NextInt64(0, int.MaxValue) | 0x1000000000000000L,
+            MessageId = MessageId,
             ReceiverUid = SelfUid,
             SenderUid = Uid,
-            MessageSequence = Sequence
+            ClientSequence = 0
         };
         using var stream = new MemoryStream();
         Serializer.Serialize(stream, reserve);
@@ -52,7 +58,7 @@ public class ForwardEntity : IMessageEntity
                 {
                     OrigSeqs = new List<uint> { Sequence },
                     SenderUin = TargetUin,
-                    Time = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                    Time = (int)(Time - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds,
                     Elems = Elements,
                     PbReserve = stream.ToArray(),
                     ToUin = 0
@@ -65,10 +71,12 @@ public class ForwardEntity : IMessageEntity
     {
         if (elems.SrcMsg is { } srcMsg)
         {
+            var reserve = Serializer.Deserialize<SrcMsg.Preserve>(srcMsg.PbReserve.AsSpan());
             return new ForwardEntity
             {
                 Sequence = srcMsg.OrigSeqs?[0] ?? 0,
                 TargetUin = (uint)srcMsg.SenderUin,
+                MessageId = reserve.MessageId
             };
         }
 

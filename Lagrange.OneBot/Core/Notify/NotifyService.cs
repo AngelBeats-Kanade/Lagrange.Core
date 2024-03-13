@@ -16,9 +16,15 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
         {
             if (@event.Chain.GetEntity<FileEntity>() is { FileId: { } id } file)
             {
-                var fileInfo = new OneBotFileInfo(id, file.FileName, (ulong)file.FileSize);
+                var fileInfo = new OneBotFileInfo(id, file.FileName, (ulong)file.FileSize, file.FileUrl ?? "");
                 await service.SendJsonAsync(new OneBotGroupFile(bot.BotUin, @event.Chain.GroupUin ?? 0, @event.Chain.FriendUin, fileInfo));
             }
+        };
+
+        bot.Invoker.OnGroupMuteEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+            await service.SendJsonAsync(new OneBotGroupMute(bot.BotUin, @event.IsMuted ? "ban" : "lift_ban", @event.GroupUin, @event.OperatorUin ?? 0, 0, @event.IsMuted ? -1 : 0));
         };
         
         bot.Invoker.OnFriendRequestEvent += async (_, @event) =>
@@ -110,6 +116,17 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
             {
                 UserId = @event.FriendUin,
                 MessageId = MessageRecord.CalcMessageHash(@event.Random, @event.Sequence),
+            });
+        };
+
+        bot.Invoker.OnFriendPokeEvent += async (_, @event) =>
+        {
+            logger.LogInformation(@event.ToString());
+            await service.SendJsonAsync(new OneBotFriendPoke(bot.BotUin)
+            {
+                SenderId = @event.FriendUin,
+                UserId = @event.FriendUin,
+                TargetId = bot.BotUin
             });
         };
     }

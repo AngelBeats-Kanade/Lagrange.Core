@@ -41,4 +41,8 @@ public partial class EventInvoker
     public event LagrangeEvent<GroupRecallEvent>? OnGroupRecallEvent;
     
     public event LagrangeEvent<FriendRecallEvent>? OnFriendRecallEvent;
+    
+    public event LagrangeEvent<DeviceLoginEvent>? OnDeviceLoginEvent;
+
+    public event LagrangeEvent<FriendPokeEvent>? OnFriendPokeEvent;
 }
