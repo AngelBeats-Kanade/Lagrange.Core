@@ -1,9 +1,6 @@
 <div align="center">
 
-# Lagrange.Core
-
-一个基于纯 C# 的 NTQQ 协议实现，源自 Konata.Core
-
+![Lagrange.Core](https://socialify.git.ci/KonataDev/Lagrange.Core/image?description=1&descriptionEditable=%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8E%E7%BA%AF%20C%23%20%E7%9A%84%20NTQQ%20%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%2C%20%E6%BA%90%E8%87%AA%20Konata.Core&font=Jost&forks=1&issues=1&logo=https%3A%2F%2Fstatic.live.moe%2Flagrange.jpg&name=1&pattern=Diagonal%20Stripes&pulls=1&stargazers=1&theme=Light)
 ![Core](https://img.shields.io/badge/Lagrange-Core-blue)
 ![OneBot](https://img.shields.io/badge/Lagrange-OneBot-blue)
 ![C#](https://img.shields.io/badge/Core-%20.NET_6-blue)
@@ -76,8 +73,8 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 |         |          | 异常设备<br/>快速 |    🟢    | Json             |    🟢    | 移除群成员       |    🟢    | ~~戳一戳事件~~   |    🔴    |
 |         |          | 新设备验证        |    🔴    | Xml              |    🟢    | 禁言群成员       |    🟢    | 消息撤回事件     |    🟢    |
 |         |          |                   |          | 合并转发         |    🟢    | 设置管理员       |    🟢    | 群成员减少       |    🟢    |
-|         |          |                   |          | 视频             |    🟡    | 发送添加好友请求 |    🟢    | 群成员增加       |    🟢    |
-|         |          |                   |          | 回复             |    🟢    | 发送加群请求     |    🟢    | 群管理员变动     |    🟢    |
+|         |          |                   |          | 视频             |    🟡    | 处理添加好友请求 |    🟢    | 群成员增加       |    🟢    |
+|         |          |                   |          | 回复             |    🟢    | 处理加群请求     |    🟢    | 群管理员变动     |    🟢    |
 |         |          |                   |          | 文件             |    🟢    | ~~语音通话~~     |    🔴    | 群组邀请         |    🟢    |
 |         |          |                   |          | 窗口抖动(戳一戳) |    🟢    | Client Key       |    🟢    | 入群请求         |    🟢    |
 |         |          |                   |          | 小程序           |    🟢    | Cookies          |    🟢    | 好友请求         |    🟢    |
