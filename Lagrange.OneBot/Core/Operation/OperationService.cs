@@ -2,6 +2,7 @@ using System.Reflection;
 using Lagrange.Core;
 using Lagrange.OneBot.Core.Entity.Action;
 using Lagrange.OneBot.Core.Network;
+using Lagrange.OneBot.Core.Notify;
 using Lagrange.OneBot.Core.Operation.Message;
 using Lagrange.OneBot.Message;
 using LiteDB;
@@ -31,10 +32,12 @@ public sealed class OperationService
         }
 
         var service = new ServiceCollection();
+        service.AddSingleton(bot);
         service.AddSingleton(context);
         service.AddSingleton(logger);
         service.AddSingleton(message);
         service.AddSingleton<MessageCommon>();
+        service.AddSingleton<TicketService>();
         service.AddLogging();
 
         foreach (var (_, type) in _operations) service.AddScoped(type);

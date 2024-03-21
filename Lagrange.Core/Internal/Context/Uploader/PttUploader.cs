@@ -19,10 +19,6 @@ internal class PttUploader : IHighwayUploader
             var uploadResult = await context.Business.SendEvent(uploadEvent);
             var metaResult = (RecordUploadEvent)uploadResult[0];
 
-            var hwUrlEvent = HighwayUrlEvent.Create();
-            var highwayUrlResult = await context.Business.SendEvent(hwUrlEvent);
-            var ticketResult = (HighwayUrlEvent)highwayUrlResult[0];
-
             if (metaResult.UKey != null)
             {
                 var index = metaResult.MsgInfo.MsgInfoBody[0].Index;
@@ -33,11 +29,11 @@ internal class PttUploader : IHighwayUploader
                     Network = Common.Convert(metaResult.Network),
                     MsgInfoBody = metaResult.MsgInfo.MsgInfoBody,
                     BlockSize = 1024 * 1024,
-                    Hash = new NTHighwayHash { FileSha1 = index.Info.FileSha1.UnHex() }
+                    Hash = new NTHighwayHash { FileSha1 = new List<byte[]> { index.Info.FileSha1.UnHex() } }
                 };
                 var extStream = extend.Serialize();
 
-                bool hwSuccess = await context.Highway.UploadSrcByStreamAsync(1007, record.AudioStream, ticketResult.SigSession, index.Info.FileHash.UnHex(), extStream.ToArray());
+                bool hwSuccess = await context.Highway.UploadSrcByStreamAsync(1007, record.AudioStream, await Common.GetTicket(context), index.Info.FileHash.UnHex(), extStream.ToArray());
                 if (!hwSuccess)
                 {
                     await record.AudioStream.DisposeAsync();
@@ -59,10 +55,6 @@ internal class PttUploader : IHighwayUploader
             var uploadResult = await context.Business.SendEvent(uploadEvent);
             var metaResult = (RecordGroupUploadEvent)uploadResult[0];
 
-            var hwUrlEvent = HighwayUrlEvent.Create();
-            var highwayUrlResult = await context.Business.SendEvent(hwUrlEvent);
-            var ticketResult = (HighwayUrlEvent)highwayUrlResult[0];
-
             if (metaResult.UKey != null)
             {
                 var index = metaResult.MsgInfo.MsgInfoBody[0].Index;
@@ -73,11 +65,11 @@ internal class PttUploader : IHighwayUploader
                     Network = Common.Convert(metaResult.Network),
                     MsgInfoBody = metaResult.MsgInfo.MsgInfoBody,
                     BlockSize = 1024 * 1024,
-                    Hash = new NTHighwayHash { FileSha1 = index.Info.FileSha1.UnHex() }
+                    Hash = new NTHighwayHash { FileSha1 = new List<byte[]> { index.Info.FileSha1.UnHex() } }
                 };
                 var extStream = extend.Serialize();
 
-                bool hwSuccess = await context.Highway.UploadSrcByStreamAsync(1008, record.AudioStream, ticketResult.SigSession, index.Info.FileHash.UnHex(), extStream.ToArray());
+                bool hwSuccess = await context.Highway.UploadSrcByStreamAsync(1008, record.AudioStream, await Common.GetTicket(context), index.Info.FileHash.UnHex(), extStream.ToArray());
                 if (!hwSuccess)
                 {
                     await record.AudioStream.DisposeAsync();

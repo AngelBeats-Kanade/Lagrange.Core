@@ -69,9 +69,9 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | Linux    |   🟢    | EasyLogin                 |   🟢    | Records   |   🟢    | Leave Group       |   🟢    | BotOffline          |   🟢    |
 |          |         | UnusalDevice<br/>Password |   🔴    | QFace     |   🟢    | Set Special Title |   🟢    | Message              |   🟢    |
 |          |         | UnusalDevice<br/>Easy     |   🟢    | Json      |   🟢    | Kick Member       |   🟢    | ~~Poke~~             |   🔴    |
-|          |         | NewDeviceVerify           |   🔴    | Xml       |   🟢    | Mute Member       |   🟢    | MessageRecall        |   🟢    |
+|          |         | NewDeviceVerify           |   🟢    | Xml       |   🟢    | Mute Member       |   🟢    | MessageRecall        |   🟢    |
 |          |         |                           |         | Forward   |   🟢    | Set Admin          |   🟢    | GroupMemberDecrease  |   🟢    |
-|          |         |                           |         | Video     |   🟡    | Friend Request     |   🟢    | GroupMemberIncrease  |   🟢    |
+|          |         |                           |         | Video     |   🟢    | Friend Request     |   🟢    | GroupMemberIncrease  |   🟢    |
 |          |         |                           |         | Reply     |   🟢    | Group Request      |   🟢    | GroupPromoteAdmin    |   🟢    |
 |          |         |                           |         | File      |   🟢    | ~~Voice Call~~     |   🔴    | GroupInvite          |   🟢    |
 |          |         |                           |         | Poke      |   🟢    | Client Key         |   🟢    | GroupRequestJoin     |   🟢    |
@@ -92,7 +92,7 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [Face]           |   🟢    |
 | [Image]          |   🟢    |
 | [Record]         |   🟢    |
-| [Video]          |   🟡    |
+| [Video]          |   🟢    |
 | [At]             |   🟢    |
 | [Rps]            |   🟢    |
 | [Dice]           |   🟢    |
@@ -163,10 +163,10 @@ Please use Lagrange.Core responsibly and in accordance with the law.
 | [/get_group_list]              |   🟢    |
 | [/get_group_member_info]       |   🟢    |
 | [/get_group_member_list]       |   🟢    |
-| ~~[/get_group_honor_info]~~    |   🔴    |
+| [/get_group_honor_info]        |   🟢    |
 | [/get_cookies]                 |   🟢    |
-| ~~[/get_csrf_token]~~          |   🔴    |
-| ~~[/get_credentials]~~         |   🔴    |
+| [/get_csrf_token]              |   🟢    |
+| [/get_credentials]             |   🟢    |
 | [/get_record]                  |   🔴    |
 | [/get_image]                   |   🔴    |
 | [/can_send_image]              |   🟢    |

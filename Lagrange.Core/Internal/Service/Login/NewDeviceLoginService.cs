@@ -10,6 +10,7 @@ using ProtoBuf;
 
 namespace Lagrange.Core.Internal.Service.Login;
 
+[EventSubscribe(typeof(NewDeviceLoginEvent))]
 [Service("trpc.login.ecdh.EcdhService.SsoNTLoginPasswordLoginNewDevice")]
 internal class NewDeviceLoginService : BaseService<NewDeviceLoginEvent>
 {
@@ -46,6 +47,7 @@ internal class NewDeviceLoginService : BaseService<NewDeviceLoginEvent>
                 keystore.Session.D2 = body.Credentials.D2;
                 keystore.Session.D2Key = body.Credentials.D2Key;
                 keystore.Session.TempPassword = body.Credentials.TempPassword;
+                keystore.Session.SessionDate = DateTime.Now;
 
                 output = NewDeviceLoginEvent.Result(0);
             }
