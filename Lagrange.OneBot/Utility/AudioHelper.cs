@@ -13,6 +13,7 @@ public static class AudioHelper
         SilkV3,
         TenSilkV3,
         Amr,
+        Ogg,
     }
 
     /// <summary>
@@ -25,7 +26,7 @@ public static class AudioHelper
     {
         // Read first 16 bytes
         var buffer = new BinaryPacket(data[..16]); 
-        uint value = buffer.ReadUint(false);
+        uint value = buffer.ReadUint();
 
         // SILKV3
         //  #  !  S  I  L  K
@@ -74,6 +75,20 @@ public static class AudioHelper
             type = AudioFormat.Mp3;
             return true;
         }
+        
+        
+        // Ogg
+        //  O  g  g  S
+        // +--+--+--+--+
+        // |4F|67|67|53
+        // +--+--+--+--+
+
+        if (value == 0x4F676753)
+        {
+            type = AudioFormat.Ogg;
+            return true;
+        }
+
 
         // MP3 no ID3
         //  ÿ  û
@@ -106,7 +121,7 @@ public static class AudioHelper
         // +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
         // 0           4           8           12       15
         buffer.Skip(4);
-        if (value == 0x52494646 && buffer.ReadUint(false) == 0x57415645)
+        if (value == 0x52494646 && buffer.ReadUint() == 0x57415645)
         {
             type = AudioFormat.Wav;
             return true;
