@@ -1,6 +1,7 @@
 using Lagrange.Core;
 using Lagrange.Core.Common.Entity;
 using Lagrange.Core.Common.Interface.Api;
+using Lagrange.Core.Event.EventArg;
 using Lagrange.Core.Message.Entity;
 using Lagrange.OneBot.Core.Entity.Notify;
 using Lagrange.OneBot.Core.Network;
@@ -93,15 +94,30 @@ public sealed class NotifyService(BotContext bot, ILogger<NotifyService> logger,
             await service.SendJsonAsync(new OneBotMemberIncrease(bot.BotUin, type, @event.GroupUin, @event.InvitorUin ?? 0, @event.MemberUin));
         };
 
-        bot.Invoker.OnGroupMemberDecreaseEvent += async (context, @event) =>
+        bot.Invoker.OnGroupMemberDecreaseEvent += async (_, @event) =>
         {
-            BotGroupRequest? botGroupRequest = (await context.ContextCollection.Business.OperationLogic.FetchGroupRequests())
-                ?.AsParallel()
-                ?.Where(r => r.EventType == BotGroupRequest.Type.KickMember && r.GroupUin == @event.GroupUin && r.TargetMemberUin == @event.MemberUin)
-                .FirstOrDefault(null as BotGroupRequest);
-
             logger.LogInformation(@event.ToString());
-            string type = @event.Type.ToString().ToLower();
+
+            BotGroupRequest? botGroupRequest = (await bot.ContextCollection.Business.OperationLogic.FetchGroupRequests())
+                ?.AsParallel()
+                .FirstOrDefault(r =>
+                {
+                    return @event.Type switch
+                    {
+                        GroupMemberDecreaseEvent.EventType.Kick => r.EventType == BotGroupRequest.Type.KickMember
+                                                                && r.TargetMemberUin == @event.MemberUin,
+                        GroupMemberDecreaseEvent.EventType.KickMe => r.EventType == BotGroupRequest.Type.KickSelf,
+                        _ => false
+                    } && r.GroupUin == @event.GroupUin;
+                });
+
+            string type = @event.Type switch
+            {
+                GroupMemberDecreaseEvent.EventType.KickMe => "kick_me",
+                GroupMemberDecreaseEvent.EventType.Leave => "leave",
+                GroupMemberDecreaseEvent.EventType.Kick => "kick",
+                _ => @event.Type.ToString()
+            };
             await service.SendJsonAsync(new OneBotMemberDecrease(bot.BotUin, type, @event.GroupUin, botGroupRequest?.InvitorMemberUin ?? 0, @event.MemberUin));
         };
 
