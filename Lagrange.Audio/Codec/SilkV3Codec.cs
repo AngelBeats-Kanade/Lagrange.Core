@@ -66,7 +66,7 @@ public static partial class SilkV3Codec
                     
                     Position = 0;  // Move position
                 }
-                catch (Exception e)  // Catch native exceptions
+                catch (Exception)  // Catch native exceptions
                 {
                     throw new EncodeException("Thrown an exception while encoding silk.");
                 }

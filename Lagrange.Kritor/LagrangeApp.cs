@@ -21,7 +21,7 @@ public class LagrangeApp : IHost
         
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken = new())
+    public Task StartAsync(CancellationToken cancellationToken = new())
     {
         _hostApp.MapGrpcService<AuthService>();
         _hostApp.MapGrpcService<CoreService>();
@@ -35,10 +35,11 @@ public class LagrangeApp : IHost
         _hostApp.MapGrpcService<WebService>();
         
         _hostApp.Start();
+        return Task.CompletedTask;
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken = new())
+    public Task StopAsync(CancellationToken cancellationToken = new())
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }
