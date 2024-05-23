@@ -66,6 +66,8 @@ https://sign.lagrangecore.org/api/sign
 
 Thanks for 外国热心网友 for Provision of Azure Servlet
 
+** Built-in SignServer is now provided, Enjoy! **
+
 ## Features List
 
 | Protocol | Support | Login                     | Support | Messages  | Support | Operations        | Support | Events              | Support |
@@ -350,8 +352,11 @@ Thanks for 外国热心网友 for Provision of Azure Servlet
 ```
 
 > [!WARNING]
+> Currently, `ForwardWebSocket` and `Http` are implemented based on `HttpListener`, which has the following problems:
 > 
-> On Linux, `Host` for `ForwardWebSocket` and `Http` must use the same value as `Host` in the request header, except for `*` and `+`! This is an upstream bug.
+> 1. On Linux, the `Host` header of an Http request must match the value of `Prefix` unless it is `+` or `*`, so configure the `Host` of `ForwardWebSocket` and `Http` to be the domain name or IP you are using to access it.
+> 
+> 2. On Windows, the `HttpListener` is based on the `http.sys` implementation, so you need to register `urlacl` before using it. see [netsh](https://learn.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-http). You can also start `Lagrange.OneBot` using the administrator, at which point `HttpListener` will automatically register the required `urlacl`.
 
 ## NOTICE BEFORE LOGIN
 
@@ -366,6 +371,6 @@ Thanks for 外国热心网友 for Provision of Azure Servlet
 
 ~~Signature API is now not provided, you may need to find it somewhere and inherit `SignProvider` class for `CustomSignProvider` in `BotConfig`~~
 
-- Built-in SignServer is now provided, Enjoy!
+- ~~Built-in SignServer is now provided, Enjoy!~~
 
-- Signature of Windows and macOS is missing, you need to figure out by your self~~
+- Signature of Windows and macOS is missing, you need to figure out by your self
