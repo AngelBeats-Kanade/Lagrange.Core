@@ -435,6 +435,14 @@ internal class OperationLogic : LogicBase
         return results.Count != 0 && results[0].ResultCode == 0;
     }
 
+    public async Task<bool> DeleteFriend(uint targetUin, bool block)
+    {
+        var uid = await Collection.Business.CachingLogic.ResolveUid(null, targetUin);
+        var deleteFriendEvent = DeleteFriendEvent.Create(uid, block);
+        var results = await Collection.Business.SendEvent(deleteFriendEvent);
+        return results.Count != 0 && results[0].ResultCode == 0;
+    }
+
     public async Task<bool> RequestFriend(uint targetUin, string question, string message)
     {
         var requestFriendSearchEvent = RequestFriendSearchEvent.Create(targetUin);
@@ -797,5 +805,47 @@ internal class OperationLogic : LogicBase
     {
         var imageUrl = await UploadImage(image);
         return await ImageOcr(imageUrl);
+    }
+
+    public async Task<(int Retcode, string Message, List<uint> FriendUins, List<uint> GroupUins)> GetPins()
+    {
+        var @event = FetchPinsEvent.Create();
+
+        var results = await Collection.Business.SendEvent(@event);
+        if (results.Count == 0)
+        {
+            return (-1, "No Result", new(), new());
+        }
+
+        var result = (FetchPinsEvent)results[0];
+        return (result.ResultCode, result.Message, result.FriendUins, result.GroupUins);
+    }
+
+    public async Task<(int Retcode, string Message)> SetPinFriend(uint uin, bool isPin)
+    {
+        var @event = SetPinFriendEvent.Create(uin, isPin);
+
+        var results = await Collection.Business.SendEvent(@event);
+        if (results.Count == 0)
+        {
+            return (-1, "No Result");
+        }
+
+        var result = (SetPinFriendEvent)results[0];
+        return (result.ResultCode, result.Message);
+    }
+
+    public async Task<(int Retcode, string Message)> SetPinGroup(uint uin, bool isPin)
+    {
+        var @event = SetPinGroupEvent.Create(uin, isPin);
+
+        var results = await Collection.Business.SendEvent(@event);
+        if (results.Count == 0)
+        {
+            return (-1, "No Result");
+        }
+
+        var result = (SetPinGroupEvent)results[0];
+        return (result.ResultCode, result.Message);
     }
 }
