@@ -107,6 +107,9 @@ public static class OperationExt
     public static Task<List<BotGroupRequest>?> FetchGroupRequests(this BotContext bot)
         => bot.ContextCollection.Business.OperationLogic.FetchGroupRequests();
 
+    public static Task<OperationResult<List<BotGroupRequest>>> FetchGroupRequestsWithResults(this BotContext bot)
+        => bot.ContextCollection.Business.OperationLogic.FetchGroupRequestsWithResult();
+
     /// <summary>
     ///
     /// </summary>
@@ -137,8 +140,8 @@ public static class OperationExt
     public static Task<bool> GroupTransfer(this BotContext bot, uint groupUin, uint targetUin)
         => bot.ContextCollection.Business.OperationLogic.GroupTransfer(groupUin, targetUin);
 
-    public static Task<bool> DeleteFriend (this BotContext bot, uint friendUin, bool block)
-        =>bot.ContextCollection.Business.OperationLogic.DeleteFriend(friendUin, block);
+    public static Task<bool> DeleteFriend(this BotContext bot, uint friendUin, bool block)
+        => bot.ContextCollection.Business.OperationLogic.DeleteFriend(friendUin, block);
 
     public static Task<bool> RequestFriend(this BotContext bot, uint targetUin, string question = "", string message = "")
         => bot.ContextCollection.Business.OperationLogic.RequestFriend(targetUin, question, message);
@@ -206,6 +209,12 @@ public static class OperationExt
     public static Task<BotUserInfo?> FetchUserInfo(this BotContext bot, uint uin, bool refreshCache = false)
         => bot.ContextCollection.Business.OperationLogic.FetchUserInfo(uin, refreshCache);
 
+    public static Task<(int code, string? message, BotGroupInfo info)> FetchGroupInfo(this BotContext bot, ulong uin)
+        => bot.ContextCollection.Business.OperationLogic.FetchGroupInfo(uin);
+
+    public static Task<(int code, string? message, BotStrangerGroupInfo info)> FetchStrangerGroupInfo(this BotContext bot, ulong uin)
+        => bot.ContextCollection.Business.OperationLogic.FetchStrangerGroupInfo(uin);
+
     public static Task<List<string>?> FetchCustomFace(this BotContext bot)
         => bot.ContextCollection.Business.OperationLogic.FetchCustomFace();
 
@@ -219,11 +228,13 @@ public static class OperationExt
             targetChain.Sequence, timestamp);
     }
 
-    public static Task<bool> UploadFriendFile(this BotContext bot, uint targetUin, FileEntity fileEntity)
-        => bot.ContextCollection.Business.OperationLogic.UploadFriendFile(targetUin, fileEntity);
+    public static async Task<bool> UploadFriendFile(this BotContext bot, uint targetUin, FileEntity fileEntity)
+        => (await UploadFriendFileWithResult(bot, targetUin, fileEntity)).IsSuccess;
 
-    public static Task<bool> FriendPoke(this BotContext bot, uint friendUin)
-        => bot.ContextCollection.Business.OperationLogic.FriendPoke(friendUin);
+    public static Task<OperationResult<object>> UploadFriendFileWithResult(this BotContext bot, uint targetUin, FileEntity fileEntity)
+        => bot.ContextCollection.Business.OperationLogic.UploadFriendFileWithResult(targetUin, fileEntity);
+    public static Task<bool> FriendPoke(this BotContext bot, uint peerUin, uint? targetUin = null)
+        => bot.ContextCollection.Business.OperationLogic.SendPoke(false, peerUin, targetUin);
 
     /// <summary>
     /// Send a special window shake to friend
@@ -293,7 +304,20 @@ public static class OperationExt
 
     public static Task<(int Retcode, string Message)> SetPinGroup(this BotContext bot, uint uin, bool isPin)
         => bot.ContextCollection.Business.OperationLogic.SetPinGroup(uin, isPin);
-    
+
     public static Task<string> FetchPrivateFSDownload(this BotContext bot, string fileId, string fileHash, uint userId)
         => bot.ContextCollection.Business.OperationLogic.FetchPrivateFSDownload(fileId, fileHash, userId);
+
+    public static Task<(int Code, string Message, string Url)> GetMediaUrl(this BotContext bot, string fileId)
+        => bot.ContextCollection.Business.OperationLogic.GetMediaUrl(fileId);
+
+    public static Task<bool> SendPoke(this BotContext bot, bool isGroup, uint peerUin, uint? targetUin = null)
+        => bot.ContextCollection.Business.OperationLogic.SendPoke(isGroup, peerUin, targetUin);
+
+    public static Task<(int Code, string Message)> GroupRecallPoke(this BotContext bot, ulong groupUin, ulong messageSequence, ulong messageTime, ulong tipsSeqId)
+    => bot.ContextCollection.Business.OperationLogic.GroupRecallPoke(groupUin, messageSequence, messageTime, tipsSeqId);
+
+    public static Task<(int Code, string Message)> FriendRecallPoke(this BotContext bot, ulong peerUin, ulong messageSequence, ulong messageTime, ulong tipsSeqId)
+        => bot.ContextCollection.Business.OperationLogic.FriendRecallPoke(peerUin, messageSequence, messageTime, tipsSeqId);
+
 }

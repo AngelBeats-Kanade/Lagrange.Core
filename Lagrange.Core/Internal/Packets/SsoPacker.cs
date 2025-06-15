@@ -19,15 +19,15 @@ internal static class SsoPacker
         var writer = new BinaryPacket();
 
         var sign = signProvider.Sign(packet.Command, packet.Sequence, packet.Payload.ToArray(), out var extra, out var token);
-        var signature = new NTDeviceSign
+        var signature = new SsoReserveFields
         {
-            Sign = sign == null ? null : new SecInfo
+            SecInfo = sign == null ? null : new SsoSecureInfo
             {
                 SecSign = sign,
                 SecToken = token,
                 SecExtra = extra
             },
-            Trace = StringGen.GenerateTrace(),
+            TraceParent = StringGen.GenerateTrace(),
             Uid = keystore.Uid
         };
         var stream = new MemoryStream();
@@ -64,8 +64,8 @@ internal static class SsoPacker
         var msgCookie = headReader.ReadBytes(Prefix.Uint32 | Prefix.WithPrefix);
         int isCompressed = headReader.ReadInt();
         var reserveField = headReader.ReadBytes(Prefix.Uint32 | Prefix.WithPrefix);
-        
-        var body = packet.ReadBytes(Prefix.Uint32 | Prefix.WithPrefix).ToArray();
+
+        var body = packet.ReadBytes(Prefix.Uint32 | Prefix.WithPrefix);
         var raw = isCompressed switch
         {
             0 or 4 => body,
