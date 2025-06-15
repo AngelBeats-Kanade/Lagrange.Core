@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Title>Lagrange.Core</Title>
         <Authors>Linwenxuan04, Tiger0132, LXY1226, TheSnowfield, and KonataDev/Contributors</Authors>
         <Description>The Implementation of NTQQ for Pure C#, Event Driven, derived from Konata.Core</Description>
-        <LangVersion>12</LangVersion>
+        <LangVersion>13</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Version>0.3.1</Version>
         <Copyright>Linwenxuan04 2023</Copyright>
@@ -29,7 +29,7 @@
 
     <ItemGroup>
         <None Include="../README.md" Pack="true" PackagePath="\" />
-        <PackageReference Include="protobuf-net" Version="3.2.45" />
+        <PackageReference Include="protobuf-net" Version="3.2.52" />
     </ItemGroup>
 
 </Project>
