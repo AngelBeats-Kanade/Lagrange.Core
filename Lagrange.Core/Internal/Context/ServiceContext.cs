@@ -68,7 +68,7 @@ internal class ServiceContext : ContextBase
         {
             bool success = instance.Build(protocolEvent, Keystore, AppInfo, DeviceInfo, out var binary, out var extraPackets);
 
-            if (success && binary != null)
+            if (success && !binary.IsEmpty)
             {
                 result.Add(new SsoPacket(attribute.PacketType, attribute.Command, (uint)_sequenceProvider.GetNewSequence(), binary.ToArray()));
 

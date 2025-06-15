@@ -16,7 +16,7 @@ internal class BaseService<TEvent> : IService where TEvent : ProtocolEvent
         out Span<byte> output, out List<Memory<byte>>? extraPackets)
     {
         extraPackets = null;
-        return (output = null!) != null;
+        return !(output = null!).IsEmpty;
     }
 
     bool IService.Parse(Span<byte> input, BotKeystore keystore, BotAppInfo appInfo, BotDeviceInfo device,
