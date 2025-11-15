@@ -32,6 +32,10 @@
 </tr>
 </table>
 
+## Termination Notice
+
+This Project has encounted missconduct, the central SignServer has been terminated temporarily.
+
 ## Out of Active Feature Requesting
 
 Lagrange.Core has completed nearly all the function and task scheduled by Linwenxuan05, so mostly enhance to the library would be concentrated to the repo for next.
